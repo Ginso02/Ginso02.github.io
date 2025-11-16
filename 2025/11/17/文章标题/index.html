@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="技术, 生活, 创意">
+    
+    <meta name="author" content="Ginso02">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+            <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/11/17/文章标题/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="教育数据采集关键工具与开源项目示例">
+<meta property="og:url" content="http://example.com/2025/11/17/%E6%96%87%E7%AB%A0%E6%A0%87%E9%A2%98/index.html">
+<meta property="og:site_name" content="Ginso02&#39;s Blog">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2025-11-16T22:38:30.000Z">
+<meta property="article:modified_time" content="2025-11-16T22:42:22.383Z">
+<meta property="article:author" content="Ginso02">
+<meta property="article:tag" content="图像识别">
+<meta property="article:tag" content="平台采集">
+<meta property="article:tag" content="开源项目">
+<meta property="article:tag" content="教育技术">
+<meta property="article:tag" content="数据采集">
+<meta property="article:tag" content="视频录制">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.ico" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <!--- Page Info-->
+    
+    <title>
+        
+            教育数据采集关键工具与开源项目示例 | Ginso02&#39;s Blog
+        
+    </title>
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null},"chinese":{"enable":true}},"home_banner":{"enable":true,"style":"static","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/bgdark.png"},"title":"Ginso02's Blog","subtitle":{"text":["不分正反，永远进步.","但思善恶，无问吉凶.","我们明日见！"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null,"fa-brands fa-github-alt":"https://github.com/Ginso02","fa-brands fa-instagram":"https://www.instagram.com/ginsoooooo02/"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"About":{"path":"/about/","icon":"fa-regular fa-circle-user"},"Categories":{"path":"/categories/","icon":"fa-regular fa-folder"},"Archives":{"path":"/archives/","icon":"fa-regular fa-calendar"},"Tags":{"path":"/tags/","icon":"fa-regular fa-tags"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"杂七杂八的记录.","show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/logo.png" class="w-full h-full rounded-xs">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                Ginso02&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/about/"
+                                        >
+                                    <i class="fa-regular fa-circle-user fa-fw"></i>
+                                    ABOUT
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/"
+                                        >
+                                    <i class="fa-regular fa-folder fa-fw"></i>
+                                    CATEGORIES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives/"
+                                        >
+                                    <i class="fa-regular fa-calendar fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/tags/"
+                                        >
+                                    <i class="fa-regular fa-tags fa-fw"></i>
+                                    TAGS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/about/"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-regular fa-circle-user fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/"
+                        >
+                            <span>
+                                CATEGORIES
+                            </span>
+                            
+                                <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives/"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-calendar fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/tags/"
+                        >
+                            <span>
+                                TAGS
+                            </span>
+                            
+                                <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">9</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">教育数据采集关键工具与开源项目示例</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/avatar.png">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">Ginso02</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-11-17 06:38:30</span>
+        <span class="mobile">2025-11-17 06:38:30</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-11-17 06:42:22</span>
+            <span class="mobile">2025-11-17 06:42:22</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%95%99%E8%82%B2%E6%8A%80%E6%9C%AF/">教育技术</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86/">数据采集</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/">开源项目</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6/">视频录制</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/">图像识别</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E5%B9%B3%E5%8F%B0%E9%87%87%E9%9B%86/">平台采集</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h1 id="教育数据采集关键工具与开源项目示例"><a href="#教育数据采集关键工具与开源项目示例" class="headerlink" title="教育数据采集关键工具与开源项目示例"></a>教育数据采集关键工具与开源项目示例</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在数字化教育时代，数据采集已成为教育质量评估、学习行为分析和个性化教学的重要基础。本文将深入探讨教育数据采集领域的三大核心技术方向，并推荐相关的开源项目和工具。</p>
+<h2 id="一、视频录制类技术"><a href="#一、视频录制类技术" class="headerlink" title="一、视频录制类技术"></a>一、视频录制类技术</h2><h3 id="技术概述"><a href="#技术概述" class="headerlink" title="技术概述"></a>技术概述</h3><p>视频录制技术在教育数据采集中主要用于记录教学过程、学生行为和课堂互动，为后续的教学分析提供原始素材。</p>
+<h3 id="关键工具与项目"><a href="#关键工具与项目" class="headerlink" title="关键工具与项目"></a>关键工具与项目</h3><h4 id="1-OBS-Studio"><a href="#1-OBS-Studio" class="headerlink" title="1. OBS Studio"></a>1. OBS Studio</h4><ul>
+<li><strong>项目地址</strong>: <a class="link"   target="_blank" rel="noopener" href="https://obsproject.com/" >https://obsproject.com/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>技术特点</strong>: 开源的视频录制和直播软件</li>
+<li><strong>应用场景</strong>: 课堂录制、在线教学、屏幕录制</li>
+<li><strong>优势</strong>: <ul>
+<li>支持多种视频源混合</li>
+<li>丰富的插件生态</li>
+<li>跨平台支持</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-FFmpeg"><a href="#2-FFmpeg" class="headerlink" title="2. FFmpeg"></a>2. FFmpeg</h4><ul>
+<li><strong>项目地址</strong>: <a class="link"   target="_blank" rel="noopener" href="https://ffmpeg.org/" >https://ffmpeg.org/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>技术特点</strong>: 强大的多媒体处理框架</li>
+<li><strong>应用场景</strong>: 视频格式转换、批量处理、流媒体处理</li>
+<li><strong>代码示例</strong>:</li>
+</ul>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 录制屏幕</span></span><br><span class="line">ffmpeg -f gdigrab -i desktop -c:v libx264 -preset ultrafast output.mp4</span><br><span class="line"></span><br><span class="line"><span class="comment"># 视频格式转换</span></span><br><span class="line">ffmpeg -i input.avi -c:v libx264 -c:a aac output.mp4</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-SimpleScreenRecorder-Linux"><a href="#3-SimpleScreenRecorder-Linux" class="headerlink" title="3. SimpleScreenRecorder (Linux)"></a>3. SimpleScreenRecorder (Linux)</h4><ul>
+<li><strong>项目地址</strong>: <a class="link"   target="_blank" rel="noopener" href="https://github.com/MaartenBaert/ssr" >https://github.com/MaartenBaert/ssr<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>技术特点</strong>: 专为Linux设计的屏幕录制工具</li>
+<li><strong>应用场景</strong>: Linux环境下的教学录制</li>
+</ul>
+<h2 id="二、图像识别类技术"><a href="#二、图像识别类技术" class="headerlink" title="二、图像识别类技术"></a>二、图像识别类技术</h2><h3 id="技术概述-1"><a href="#技术概述-1" class="headerlink" title="技术概述"></a>技术概述</h3><p>图像识别技术通过计算机视觉算法分析教育场景中的图像数据，可以实现学生行为识别、表情分析、注意力检测等功能。</p>
+<h3 id="关键工具与项目-1"><a href="#关键工具与项目-1" class="headerlink" title="关键工具与项目"></a>关键工具与项目</h3><h4 id="1-OpenCV"><a href="#1-OpenCV" class="headerlink" title="1. OpenCV"></a>1. OpenCV</h4><ul>
+<li><strong>项目地址</strong>: <a class="link"   target="_blank" rel="noopener" href="https://opencv.org/" >https://opencv.org/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>技术特点</strong>: 开源计算机视觉库</li>
+<li><strong>应用场景</strong>: 人脸检测、表情识别、行为分析</li>
+<li><strong>代码示例</strong>:</li>
+</ul>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 人脸检测示例</span></span><br><span class="line">face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + <span class="string">&#x27;haarcascade_frontalface_default.xml&#x27;</span>)</span><br><span class="line">cap = cv2.VideoCapture(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    ret, frame = cap.read()</span><br><span class="line">    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    faces = face_cascade.detectMultiScale(gray, <span class="number">1.1</span>, <span class="number">4</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (x, y, w, h) <span class="keyword">in</span> faces:</span><br><span class="line">        cv2.rectangle(frame, (x, y), (x+w, y+h), (<span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span>), <span class="number">2</span>)</span><br><span class="line">    </span><br><span class="line">    cv2.imshow(<span class="string">&#x27;Student Detection&#x27;</span>, frame)</span><br><span class="line">    <span class="keyword">if</span> cv2.waitKey(<span class="number">1</span>) &amp; <span class="number">0xFF</span> == <span class="built_in">ord</span>(<span class="string">&#x27;q&#x27;</span>):</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">cap.release()</span><br><span class="line">cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="2-MediaPipe"><a href="#2-MediaPipe" class="headerlink" title="2. MediaPipe"></a>2. MediaPipe</h4><ul>
+<li><strong>项目地址</strong>: <a class="link"   target="_blank" rel="noopener" href="https://mediapipe.dev/" >https://mediapipe.dev/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>技术特点</strong>: Google开源的机器学习框架</li>
+<li><strong>应用场景</strong>: 手势识别、姿态检测、面部表情分析</li>
+<li><strong>特色功能</strong>:<ul>
+<li>实时性能优异</li>
+<li>预训练模型丰富</li>
+<li>移动端友好</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-YOLO-You-Only-Look-Once"><a href="#3-YOLO-You-Only-Look-Once" class="headerlink" title="3. YOLO (You Only Look Once)"></a>3. YOLO (You Only Look Once)</h4><ul>
+<li><strong>项目地址</strong>: <a class="link"   target="_blank" rel="noopener" href="https://github.com/ultralytics/yolov5" >https://github.com/ultralytics/yolov5<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>技术特点</strong>: 实时目标检测算法</li>
+<li><strong>应用场景</strong>: 教室物体检测、学生行为识别</li>
+<li><strong>代码示例</strong>:</li>
+</ul>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载预训练模型</span></span><br><span class="line">model = torch.hub.load(<span class="string">&#x27;ultralytics/yolov5&#x27;</span>, <span class="string">&#x27;yolov5s&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检测图像</span></span><br><span class="line">results = model(<span class="string">&#x27;classroom.jpg&#x27;</span>)</span><br><span class="line">results.show()  <span class="comment"># 显示结果</span></span><br></pre></td></tr></table></figure></div>
+
+<h4 id="4-FER-Facial-Expression-Recognition"><a href="#4-FER-Facial-Expression-Recognition" class="headerlink" title="4. FER (Facial Expression Recognition)"></a>4. FER (Facial Expression Recognition)</h4><ul>
+<li><strong>项目地址</strong>: <a class="link"   target="_blank" rel="noopener" href="https://github.com/justinshenk/fer" >https://github.com/justinshenk/fer<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>技术特点</strong>: 专门用于面部表情识别</li>
+<li><strong>应用场景</strong>: 学生情绪状态监测、学习投入度分析</li>
+</ul>
+<h2 id="三、平台采集类技术"><a href="#三、平台采集类技术" class="headerlink" title="三、平台采集类技术"></a>三、平台采集类技术</h2><h3 id="技术概述-2"><a href="#技术概述-2" class="headerlink" title="技术概述"></a>技术概述</h3><p>平台采集技术主要针对在线教育平台、学习管理系统等进行数据抓取和分析，获取学习行为数据、成绩数据等。</p>
+<h3 id="关键工具与项目-2"><a href="#关键工具与项目-2" class="headerlink" title="关键工具与项目"></a>关键工具与项目</h3><h4 id="1-Selenium"><a href="#1-Selenium" class="headerlink" title="1. Selenium"></a>1. Selenium</h4><ul>
+<li><strong>项目地址</strong>: <a class="link"   target="_blank" rel="noopener" href="https://selenium.dev/" >https://selenium.dev/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>技术特点</strong>: Web自动化测试工具</li>
+<li><strong>应用场景</strong>: 在线学习平台数据采集、自动化测试</li>
+<li><strong>代码示例</strong>:</li>
+</ul>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.common.by <span class="keyword">import</span> By</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化驱动</span></span><br><span class="line">driver = webdriver.Chrome()</span><br><span class="line">driver.get(<span class="string">&quot;https://example-learning-platform.com&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 登录</span></span><br><span class="line">username = driver.find_element(By.ID, <span class="string">&quot;username&quot;</span>)</span><br><span class="line">password = driver.find_element(By.ID, <span class="string">&quot;password&quot;</span>)</span><br><span class="line">username.send_keys(<span class="string">&quot;your_username&quot;</span>)</span><br><span class="line">password.send_keys(<span class="string">&quot;your_password&quot;</span>)</span><br><span class="line"></span><br><span class="line">login_button = driver.find_element(By.ID, <span class="string">&quot;login&quot;</span>)</span><br><span class="line">login_button.click()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 采集学习数据</span></span><br><span class="line">time.sleep(<span class="number">2</span>)</span><br><span class="line">learning_progress = driver.find_element(By.CLASS_NAME, <span class="string">&quot;progress-bar&quot;</span>).text</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;学习进度: <span class="subst">&#123;learning_progress&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">driver.quit()</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="2-Scrapy"><a href="#2-Scrapy" class="headerlink" title="2. Scrapy"></a>2. Scrapy</h4><ul>
+<li><strong>项目地址</strong>: <a class="link"   target="_blank" rel="noopener" href="https://scrapy.org/" >https://scrapy.org/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>技术特点</strong>: Python爬虫框架</li>
+<li><strong>应用场景</strong>: 大规模教育数据采集、网站内容抓取</li>
+<li><strong>代码示例</strong>:</li>
+</ul>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EducationSpider</span>(scrapy.Spider):</span><br><span class="line">    name = <span class="string">&#x27;education_data&#x27;</span></span><br><span class="line">    start_urls = [<span class="string">&#x27;https://example-education-site.com&#x27;</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">parse</span>(<span class="params">self, response</span>):</span><br><span class="line">        courses = response.css(<span class="string">&#x27;.course-item&#x27;</span>)</span><br><span class="line">        <span class="keyword">for</span> course <span class="keyword">in</span> courses:</span><br><span class="line">            <span class="keyword">yield</span> &#123;</span><br><span class="line">                <span class="string">&#x27;title&#x27;</span>: course.css(<span class="string">&#x27;.course-title::text&#x27;</span>).get(),</span><br><span class="line">                <span class="string">&#x27;description&#x27;</span>: course.css(<span class="string">&#x27;.course-desc::text&#x27;</span>).get(),</span><br><span class="line">                <span class="string">&#x27;duration&#x27;</span>: course.css(<span class="string">&#x27;.course-duration::text&#x27;</span>).get(),</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-Beautiful-Soup"><a href="#3-Beautiful-Soup" class="headerlink" title="3. Beautiful Soup"></a>3. Beautiful Soup</h4><ul>
+<li><strong>项目地址</strong>: <a class="link"   target="_blank" rel="noopener" href="https://www.crummy.com/software/BeautifulSoup/" >https://www.crummy.com/software/BeautifulSoup/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>技术特点</strong>: HTML&#x2F;XML解析库</li>
+<li><strong>应用场景</strong>: 静态网页内容提取、数据清洗</li>
+<li><strong>代码示例</strong>:</li>
+</ul>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取网页内容</span></span><br><span class="line">url = <span class="string">&quot;https://example-course-catalog.com&quot;</span></span><br><span class="line">response = requests.get(url)</span><br><span class="line">soup = BeautifulSoup(response.content, <span class="string">&#x27;html.parser&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取课程信息</span></span><br><span class="line">courses = soup.find_all(<span class="string">&#x27;div&#x27;</span>, class_=<span class="string">&#x27;course&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> course <span class="keyword">in</span> courses:</span><br><span class="line">    title = course.find(<span class="string">&#x27;h3&#x27;</span>).text</span><br><span class="line">    instructor = course.find(<span class="string">&#x27;.instructor&#x27;</span>).text</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;课程: <span class="subst">&#123;title&#125;</span>, 讲师: <span class="subst">&#123;instructor&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="4-Puppeteer"><a href="#4-Puppeteer" class="headerlink" title="4. Puppeteer"></a>4. Puppeteer</h4><ul>
+<li><strong>项目地址</strong>: <a class="link"   target="_blank" rel="noopener" href="https://pptr.dev/" >https://pptr.dev/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><strong>技术特点</strong>: Node.js控制Chrome的工具</li>
+<li><strong>应用场景</strong>: JavaScript渲染页面的数据采集</li>
+<li><strong>代码示例</strong>:</li>
+</ul>
+<div class="code-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> puppeteer = <span class="built_in">require</span>(<span class="string">&#x27;puppeteer&#x27;</span>);</span><br><span class="line"></span><br><span class="line">(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> browser = <span class="keyword">await</span> puppeteer.<span class="title function_">launch</span>();</span><br><span class="line">  <span class="keyword">const</span> page = <span class="keyword">await</span> browser.<span class="title function_">newPage</span>();</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">await</span> page.<span class="title function_">goto</span>(<span class="string">&#x27;https://learning-platform.com&#x27;</span>);</span><br><span class="line">  <span class="keyword">await</span> page.<span class="title function_">type</span>(<span class="string">&#x27;#username&#x27;</span>, <span class="string">&#x27;your_username&#x27;</span>);</span><br><span class="line">  <span class="keyword">await</span> page.<span class="title function_">type</span>(<span class="string">&#x27;#password&#x27;</span>, <span class="string">&#x27;your_password&#x27;</span>);</span><br><span class="line">  <span class="keyword">await</span> page.<span class="title function_">click</span>(<span class="string">&#x27;#login&#x27;</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">await</span> page.<span class="title function_">waitForSelector</span>(<span class="string">&#x27;.dashboard&#x27;</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> courseData = <span class="keyword">await</span> page.<span class="title function_">evaluate</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.course-item&#x27;</span>)).<span class="title function_">map</span>(<span class="function"><span class="params">item</span> =&gt;</span> (&#123;</span><br><span class="line">      <span class="attr">title</span>: item.<span class="title function_">querySelector</span>(<span class="string">&#x27;.title&#x27;</span>).<span class="property">textContent</span>,</span><br><span class="line">      <span class="attr">progress</span>: item.<span class="title function_">querySelector</span>(<span class="string">&#x27;.progress&#x27;</span>).<span class="property">textContent</span></span><br><span class="line">    &#125;));</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;课程数据:&#x27;</span>, courseData);</span><br><span class="line">  <span class="keyword">await</span> browser.<span class="title function_">close</span>();</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="数据处理与分析工具"><a href="#数据处理与分析工具" class="headerlink" title="数据处理与分析工具"></a>数据处理与分析工具</h2><h3 id="1-Pandas-NumPy"><a href="#1-Pandas-NumPy" class="headerlink" title="1. Pandas &amp; NumPy"></a>1. Pandas &amp; NumPy</h3><ul>
+<li><strong>用途</strong>: 数据清洗、预处理、统计分析</li>
+<li><strong>示例</strong>:</li>
+</ul>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取采集的数据</span></span><br><span class="line">df = pd.read_csv(<span class="string">&#x27;student_data.csv&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据清洗</span></span><br><span class="line">df = df.dropna()  <span class="comment"># 删除空值</span></span><br><span class="line">df[<span class="string">&#x27;score&#x27;</span>] = pd.to_numeric(df[<span class="string">&#x27;score&#x27;</span>], errors=<span class="string">&#x27;coerce&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计分析</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;平均分: <span class="subst">&#123;df[<span class="string">&#x27;score&#x27;</span>].mean()&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;标准差: <span class="subst">&#123;df[<span class="string">&#x27;score&#x27;</span>].std()&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-Jupyter-Notebook"><a href="#2-Jupyter-Notebook" class="headerlink" title="2. Jupyter Notebook"></a>2. Jupyter Notebook</h3><ul>
+<li><strong>用途</strong>: 交互式数据分析、可视化展示</li>
+<li><strong>优势</strong>: 代码、文档、图表一体化</li>
+</ul>
+<h2 id="数据可视化"><a href="#数据可视化" class="headerlink" title="数据可视化"></a>数据可视化</h2><h3 id="1-Matplotlib-Seaborn"><a href="#1-Matplotlib-Seaborn" class="headerlink" title="1. Matplotlib &amp; Seaborn"></a>1. Matplotlib &amp; Seaborn</h3><div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"></span><br><span class="line"><span class="comment"># 成绩分布图</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))</span><br><span class="line">sns.histplot(df[<span class="string">&#x27;score&#x27;</span>], kde=<span class="literal">True</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;学生成绩分布&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;分数&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;频率&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-Plotly"><a href="#2-Plotly" class="headerlink" title="2. Plotly"></a>2. Plotly</h3><div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> plotly.express <span class="keyword">as</span> px</span><br><span class="line"></span><br><span class="line"><span class="comment"># 交互式图表</span></span><br><span class="line">fig = px.scatter(df, x=<span class="string">&#x27;study_time&#x27;</span>, y=<span class="string">&#x27;score&#x27;</span>, </span><br><span class="line">                 title=<span class="string">&#x27;学习时间与成绩关系&#x27;</span>)</span><br><span class="line">fig.show()</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="最佳实践与注意事项"><a href="#最佳实践与注意事项" class="headerlink" title="最佳实践与注意事项"></a>最佳实践与注意事项</h2><h3 id="1-数据隐私与伦理"><a href="#1-数据隐私与伦理" class="headerlink" title="1. 数据隐私与伦理"></a>1. 数据隐私与伦理</h3><ul>
+<li><strong>学生隐私保护</strong>: 遵循FERPA等教育隐私法规</li>
+<li><strong>数据匿名化</strong>: 对个人身份信息进行脱敏处理</li>
+<li><strong>知情同意</strong>: 确保数据采集获得相关方同意</li>
+</ul>
+<h3 id="2-技术考虑"><a href="#2-技术考虑" class="headerlink" title="2. 技术考虑"></a>2. 技术考虑</h3><ul>
+<li><strong>数据质量</strong>: 建立数据验证和清洗流程</li>
+<li><strong>实时性要求</strong>: 根据应用场景选择合适的采集频率</li>
+<li><strong>存储与备份</strong>: 建立可靠的数据存储和备份机制</li>
+</ul>
+<h3 id="3-法律合规"><a href="#3-法律合规" class="headerlink" title="3. 法律合规"></a>3. 法律合规</h3><ul>
+<li><strong>网站爬虫</strong>: 遵守robots.txt协议和网站使用条款</li>
+<li><strong>API使用</strong>: 合理使用API，避免超过限制</li>
+<li><strong>版权保护</strong>: 尊重内容版权，合理使用采集数据</li>
+</ul>
+<h2 id="项目整合示例"><a href="#项目整合示例" class="headerlink" title="项目整合示例"></a>项目整合示例</h2><p>以下是一个综合性的教育数据采集项目架构：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 项目结构示例</span></span><br><span class="line">education_data_collector/</span><br><span class="line">├── video_recorder/          <span class="comment"># 视频录制模块</span></span><br><span class="line">│   ├── obs_controller.py</span><br><span class="line">│   └── ffmpeg_processor.py</span><br><span class="line">├── image_analyzer/          <span class="comment"># 图像分析模块</span></span><br><span class="line">│   ├── face_detector.py</span><br><span class="line">│   ├── emotion_analyzer.py</span><br><span class="line">│   └── attention_tracker.py</span><br><span class="line">├── platform_scraper/       <span class="comment"># 平台采集模块</span></span><br><span class="line">│   ├── lms_scraper.py</span><br><span class="line">│   ├── mooc_collector.py</span><br><span class="line">│   └── data_extractor.py</span><br><span class="line">├── data_processor/         <span class="comment"># 数据处理模块</span></span><br><span class="line">│   ├── cleaner.py</span><br><span class="line">│   ├── analyzer.py</span><br><span class="line">│   └── visualizer.py</span><br><span class="line">└── config/                 <span class="comment"># 配置文件</span></span><br><span class="line">    ├── settings.py</span><br><span class="line">    └── credentials.json</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>教育数据采集是一个多技术融合的领域，需要根据具体的应用场景选择合适的工具和方法。本文介绍的三大技术方向各有特色：</p>
+<ul>
+<li><strong>视频录制技术</strong>: 适合记录完整的教学过程，获取丰富的行为数据</li>
+<li><strong>图像识别技术</strong>: 能够实时分析学生状态，提供即时反馈</li>
+<li><strong>平台采集技术</strong>: 可以大规模获取在线学习数据，支持量化分析</li>
+</ul>
+<p>在实际应用中，建议采用多技术融合的方式，构建完整的教育数据采集和分析系统，为教育决策提供有力支撑。</p>
+<h2 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h2><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://docs.opencv.org/master/d6/d00/tutorial_py_root.html" >OpenCV官方教程<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://selenium-python.readthedocs.io/" >Selenium官方文档<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://docs.scrapy.org/en/latest/" >Scrapy官方指南<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://ffmpeg.org/documentation.html" >FFmpeg官方文档<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://google.github.io/mediapipe/solutions/solutions.html" >MediaPipe解决方案<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+</ul>
+<hr>
+<p><em>如果您对本文内容有任何问题或建议，欢迎在评论区交流讨论！</em></p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 教育数据采集关键工具与开源项目示例</li>
+        <li><strong>Author:</strong> Ginso02</li>
+        <li><strong>Created at
+                :</strong> 2025-11-17 06:38:30</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2025-11-17 06:42:22
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2025/11/17/文章标题/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E6%95%99%E8%82%B2%E6%8A%80%E6%9C%AF/">#教育技术</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86/">#数据采集</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/">#开源项目</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6/">#视频录制</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/">#图像识别</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E5%B9%B3%E5%8F%B0%E9%87%87%E9%9B%86/">#平台采集</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/10/15/task01%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%EF%BC%9Awow-agent%E5%8F%8A%E5%85%B6%E8%83%8C%E5%90%8E%E7%9A%84AI%E5%BA%94%E7%94%A8%E6%9C%BA%E4%BC%9A/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">task01读书笔记：wow-agent及其背后的AI应用机会</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">教育数据采集关键工具与开源项目示例</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%99%E8%82%B2%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%85%B3%E9%94%AE%E5%B7%A5%E5%85%B7%E4%B8%8E%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B"><span class="nav-text">教育数据采集关键工具与开源项目示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6%E7%B1%BB%E6%8A%80%E6%9C%AF"><span class="nav-text">一、视频录制类技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%A6%82%E8%BF%B0"><span class="nav-text">技术概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%B7%A5%E5%85%B7%E4%B8%8E%E9%A1%B9%E7%9B%AE"><span class="nav-text">关键工具与项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB%E7%B1%BB%E6%8A%80%E6%9C%AF"><span class="nav-text">二、图像识别类技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%A6%82%E8%BF%B0-1"><span class="nav-text">技术概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%B7%A5%E5%85%B7%E4%B8%8E%E9%A1%B9%E7%9B%AE-1"><span class="nav-text">关键工具与项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%B9%B3%E5%8F%B0%E9%87%87%E9%9B%86%E7%B1%BB%E6%8A%80%E6%9C%AF"><span class="nav-text">三、平台采集类技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%A6%82%E8%BF%B0-2"><span class="nav-text">技术概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%B7%A5%E5%85%B7%E4%B8%8E%E9%A1%B9%E7%9B%AE-2"><span class="nav-text">关键工具与项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B8%8E%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="nav-text">数据处理与分析工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Pandas-NumPy"><span class="nav-text">1. Pandas &amp; NumPy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Jupyter-Notebook"><span class="nav-text">2. Jupyter Notebook</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-text">数据可视化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Matplotlib-Seaborn"><span class="nav-text">1. Matplotlib &amp; Seaborn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Plotly"><span class="nav-text">2. Plotly</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">最佳实践与注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E9%9A%90%E7%A7%81%E4%B8%8E%E4%BC%A6%E7%90%86"><span class="nav-text">1. 数据隐私与伦理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8A%80%E6%9C%AF%E8%80%83%E8%99%91"><span class="nav-text">2. 技术考虑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%B3%95%E5%BE%8B%E5%90%88%E8%A7%84"><span class="nav-text">3. 法律合规</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E6%95%B4%E5%90%88%E7%A4%BA%E4%BE%8B"><span class="nav-text">项目整合示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%BA%90"><span class="nav-text">参考资源</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ginso02</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        6 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+
+</main>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Swup.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/imageViewer.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/utils.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/main.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/navbarShrink.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/scrollTopBottom.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/lightDarkSwitch.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/categoryList.js" ></script>
+
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/codeBlock.js" ></script>
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/lazyload.js" ></script>
+
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/runtime.js" ></script>
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/odometer.min.js" ></script>
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/assets/odometer-theme-minimal.css">
+
+
+
+  <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Typed.min.js" ></script>
+  <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/typed.js" ></script>
+
+
+
+
+
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/anime.min.js" ></script>
+
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/tocToggle.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/toc.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/tabs.js" data-swup-reload-script></script>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/essays.js" data-swup-reload-script></script>
+
+
+
+
+	
+</body>
+
+</html>
