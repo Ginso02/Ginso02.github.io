@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教育数据采集页面</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #4361ee;
+    --primary-light: #4895ef;
+    --secondary: #3f37c9;
+    --accent: #4cc9f0;
+    --success: #4ade80;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --gray: #64748b;
+    --gray-light: #e2e8f0;
+    --border-radius: 12px;
+    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+    min-height: 100vh;
+    color: var(--dark);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+    letter-spacing: -0.5px;
+}
+
+.header p {
+    font-size: 1.1rem;
+    color: var(--gray);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.controls {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.controls button {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: var(--transition);
+    margin: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+}
+
+.controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(67, 97, 238, 0.3);
+}
+
+.controls button.secondary {
+    background: white;
+    color: var(--primary);
+    border: 1px solid var(--primary-light);
+}
+
+.status-bar {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    background: var(--light);
+    min-width: 120px;
+}
+
+.status-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+.status-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.data-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    display: none;
+    z-index: 1000;
+    border-left: 4px solid var(--primary);
+}
+
+.popup-header {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.popup-title {
+    font-weight: 600;
+    color: var(--dark);
+    flex: 1;
+}
+
+.popup-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--gray);
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-content {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 0.85rem;
+    background: var(--light);
+    padding: 12px;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+
+.activity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.activity-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.activity-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+
+.activity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.15);
+}
+
+.activity-card h3 {
+    color: var(--dark);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.activity-card h3 .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(67, 97, 238, 0.1);
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.quiz-container {
+    margin: 15px 0;
+}
+
+.question {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: rgba(67, 97, 238, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary);
+}
+
+.options label {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 6px;
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.options label:hover {
+    background-color: rgba(67, 97, 238, 0.08);
+    border-color: rgba(67, 97, 238, 0.2);
+}
+
+.options input {
+    margin-right: 10px;
+    transform: scale(1.1);
+}
+
+.typing-area {
+    width: 100%;
+    min-height: 120px;
+    border: 2px solid var(--gray-light);
+    border-radius: 8px;
+    padding: 15px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    resize: vertical;
+    transition: var(--transition);
+    background: white;
+}
+
+.typing-area:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+.heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 3px;
+    margin: 15px 0;
+    padding: 15px;
+    background: var(--light);
+    border-radius: 8px;
+}
+
+.heatmap-cell {
+    aspect-ratio: 1;
+    background: var(--gray-light);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.1);
+}
+
+.timer-display {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-align: center;
+    margin: 10px 0;
+    padding: 8px;
+    background: rgba(67, 97, 238, 0.05);
+    border-radius: 6px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--gray-light);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), #22c55e);
+    transition: width 0.5s ease;
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    
+    .header h1 {
+        font-size: 2rem;
+    }
+    
+    .activity-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .status-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .data-popup {
+        width: calc(100vw - 40px);
+        right: 20px;
+        top: 10px;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.activity-card {
+    animation: fadeIn 0.6s ease-out;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>教育数据采集页面</h1>
+            <p>在此页面进行各种学习活动，数据将实时传输到显示页面</p>
+        </div>
+
+        <div class="controls">
+            <button onclick="openDisplayWindow()">
+                <span>📊</span> 打开数据显示页面
+            </button>
+            <button onclick="startDataCollection()" id="startBtn">
+                <span>▶️</span> 开始数据采集
+            </button>
+            <button onclick="pauseDataCollection()" class="secondary" id="pauseBtn" disabled>
+                <span>⏸️</span> 暂停采集
+            </button>
+            <button onclick="resetData()" class="secondary">
+                <span>🔄</span> 重置数据
+            </button>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-value" id="sessionTime">00:00</div>
+                <div class="status-label">采集时间</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="totalEvents">0</div>
+                <div class="status-label">总事件数</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="activeUsers">1</div>
+                <div class="status-label">活跃用户</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="dataSize">0KB</div>
+                <div class="status-label">数据大小</div>
+            </div>
+        </div>
+
+        <!-- 数据弹窗 -->
+        <div class="data-popup" id="dataPopup">
+            <div class="popup-header">
+                <div class="popup-title">实时数据</div>
+                <button class="popup-close" onclick="hideDataPopup()">×</button>
+            </div>
+            <div class="popup-content" id="popupContent">
+                等待数据采集...
+            </div>
+        </div>
+
+        <div class="activity-grid">
+            <!-- 测验答题区域 -->
+            <div class="activity-card">
+                <h3><span class="icon">📝</span>知识测验</h3>
+                <div class="quiz-container">
+                    <div class="timer-display" id="quizTimer">00:00</div>
+                    <div class="question">
+                        <p><strong>1. JavaScript是什么类型的语言？</strong></p>
+                        <div class="options">
+                            <label><input type="radio" name="q1" value="A" data-question="1"> A. 编译型语言</label>
+                            <label><input type="radio" name="q1" value="B" data-question="1"> B. 解释型语言</label>
+                            <label><input type="radio" name="q1" value="C" data-question="1"> C. 汇编语言</label>
+                            <label><input type="radio" name="q1" value="D" data-question="1"> D. 机器语言</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p><strong>2. 以下哪个是CSS预处理器？</strong></p>
+                        <div class="options">
+                            <label><input type="radio" name="q2" value="A" data-question="2"> A. HTML</label>
+                            <label><input type="radio" name="q2" value="B" data-question="2"> B. SASS</label>
+                            <label><input type="radio" name="q2" value="C" data-question="2"> C. PHP</label>
+                            <label><input type="radio" name="q2" value="D" data-question="2"> D. MySQL</label>
+                        </div>
+                    </div>
+                    <button onclick="submitQuiz()">提交测验</button>
+                </div>
+            </div>
+
+            <!-- 文本输入分析 -->
+            <div class="activity-card">
+                <h3><span class="icon">⌨️</span>写作练习</h3>
+                <p>在下方文本框中进行写作，系统将分析您的输入模式</p>
+                <textarea class="typing-area" id="essayInput" placeholder="请写一篇关于前端开发的短文..."></textarea>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="writingProgress" style="width: 0%"></div>
+                </div>
+                <p>目标字数: 200字</p>
+            </div>
+
+            <!-- 交互热力图 -->
+            <div class="activity-card">
+                <h3><span class="icon">🎯</span>交互练习</h3>
+                <p>点击下方网格区域，观察您的交互模式</p>
+                <div class="heatmap-grid" id="interactionGrid">
+                    <!-- 将由JavaScript动态生成 -->
+                </div>
+                <button onclick="clearHeatmap()">清除热力图</button>
+            </div>
+
+            <!-- 专注度训练 -->
+            <div class="activity-card">
+                <h3><span class="icon">🧘</span>专注度训练</h3>
+                <p>保持在此页面，避免切换标签页或窗口</p>
+                <div class="timer-display" id="focusTimer">专注时间: 00:00</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="focusProgress" style="width: 0%"></div>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <div id="focusStatus" style="font-weight: 600;">准备开始</div>
+                </div>
+                <button onclick="startFocusTraining()">开始专注训练</button>
+            </div>
+
+            <!-- 阅读理解 -->
+            <div class="activity-card">
+                <h3><span class="icon">📖</span>阅读理解</h3>
+                <div style="background: var(--light); padding: 15px; border-radius: 8px; margin-bottom: 15px; line-height: 1.8;">
+                    <h4>前端开发技术栈</h4>
+                    <p>现代前端开发通常包括HTML、CSS和JavaScript三大核心技术。HTML负责网页的结构和内容，CSS用于样式和布局设计，而JavaScript则提供交互功能和动态效果。</p>
+                    <p>随着技术的发展，现在还有很多框架和工具帮助开发者提高效率，比如React、Vue.js、Angular等前端框架，以及Webpack、Vite等构建工具。</p>
+                </div>
+                <div class="question">
+                    <p><strong>根据上文，前端开发的三大核心技术是什么？</strong></p>
+                    <div class="options">
+                        <label><input type="radio" name="reading" value="A"> A. HTML、CSS、JavaScript</label>
+                        <label><input type="radio" name="reading" value="B"> B. React、Vue、Angular</label>
+                        <label><input type="radio" name="reading" value="C"> C. HTML、PHP、MySQL</label>
+                        <label><input type="radio" name="reading" value="D"> D. CSS、Webpack、Vite</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// 全局数据存储
+let dataCollection = {
+    sessionId: 'session_' + Date.now(),
+    startTime: null,
+    isCollecting: false,
+    events: [],
+    quizData: [],
+    writingData: [],
+    interactionData: [],
+    focusData: [],
+    readingData: []
+};
+
+let displayWindow = null;
+let sessionTimer = null;
+let focusTimer = null;
+
+// 页面加载初始化
+window.onload = function() {
+    initializeCollector();
+    setupEventListeners();
+};
+
+// 初始化数据采集器
+function initializeCollector() {
+    console.log('数据采集器初始化完成');
+    updateStatusDisplay();
+}
+
+// 设置事件监听器
+function setupEventListeners() {
+    // 页面交互事件
+    document.addEventListener('click', recordClickEvent);
+    document.addEventListener('scroll', recordScrollEvent);
+    document.addEventListener('mousemove', recordMouseEvent);
+    document.addEventListener('keypress', recordKeyEvent);
+    
+    // 页面焦点事件
+    window.addEventListener('focus', recordFocusEvent);
+    window.addEventListener('blur', recordBlurEvent);
+    
+    // 测验选择事件
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', recordQuizSelection);
+    });
+    
+    // 写作输入事件
+    const essayInput = document.getElementById('essayInput');
+    essayInput.addEventListener('input', recordWritingEvent);
+    essayInput.addEventListener('paste', recordPasteEvent);
+    
+    // 生成交互网格
+    generateInteractionGrid();
+    
+    // 阅读选择事件
+    document.querySelectorAll('input[name="reading"]').forEach(radio => {
+        radio.addEventListener('change', recordReadingAnswer);
+    });
+}
+
+// 开始数据采集
+function startDataCollection() {
+    dataCollection.isCollecting = true;
+    dataCollection.startTime = Date.now();
+    
+    document.getElementById('startBtn').disabled = true;
+    document.getElementById('pauseBtn').disabled = false;
+    
+    // 开始计时器
+    sessionTimer = setInterval(updateSessionTimer, 1000);
+    
+    // 记录开始事件
+    recordEvent('session_start', { timestamp: dataCollection.startTime });
+    
+    console.log('数据采集已开始');
+}
+
+// 暂停数据采集
+function pauseDataCollection() {
+    dataCollection.isCollecting = false;
+    
+    document.getElementById('startBtn').disabled = false;
+    document.getElementById('pauseBtn').disabled = true;
+    
+    if (sessionTimer) {
+        clearInterval(sessionTimer);
+        sessionTimer = null;
+    }
+    
+    recordEvent('session_pause', { timestamp: Date.now() });
+    console.log('数据采集已暂停');
+}
+
+// 重置数据
+function resetData() {
+    dataCollection = {
+        sessionId: 'session_' + Date.now(),
+        startTime: null,
+        isCollecting: false,
+        events: [],
+        quizData: [],
+        writingData: [],
+        interactionData: [],
+        focusData: [],
+        readingData: []
+    };
+    
+    // 重置显示
+    updateStatusDisplay();
+    clearHeatmap();
+    document.getElementById('essayInput').value = '';
+    document.getElementById('writingProgress').style.width = '0%';
+    document.getElementById('focusProgress').style.width = '0%';
+    
+    // 重置选择
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.checked = false;
+    });
+    
+    console.log('数据已重置');
+}
+
+// 记录通用事件
+function recordEvent(type, data) {
+    if (!dataCollection.isCollecting && type !== 'session_start') return;
+    
+    const event = {
+        type: type,
+        timestamp: Date.now(),
+        sessionId: dataCollection.sessionId,
+        ...data
+    };
+    
+    dataCollection.events.push(event);
+    updateStatusDisplay();
+    sendDataToDisplay();
+    
+    // 显示在弹窗中
+    showRecentEvent(event);
+}
+
+// 记录点击事件
+function recordClickEvent(e) {
+    recordEvent('click', {
+        element: e.target.tagName,
+        className: e.target.className,
+        x: e.clientX,
+        y: e.clientY,
+        pageX: e.pageX,
+        pageY: e.pageY
+    });
+}
+
+// 记录滚动事件
+let scrollThrottle = false;
+function recordScrollEvent() {
+    if (scrollThrottle) return;
+    scrollThrottle = true;
+    
+    setTimeout(() => {
+        recordEvent('scroll', {
+            scrollY: window.scrollY,
+            scrollX: window.scrollX,
+            documentHeight: document.body.scrollHeight,
+            viewportHeight: window.innerHeight
+        });
+        scrollThrottle = false;
+    }, 100);
+}
+
+// 记录鼠标移动（节流）
+let mouseThrottle = false;
+function recordMouseEvent(e) {
+    if (mouseThrottle) return;
+    mouseThrottle = true;
+    
+    setTimeout(() => {
+        recordEvent('mousemove', {
+            x: e.clientX,
+            y: e.clientY
+        });
+        mouseThrottle = false;
+    }, 200);
+}
+
+// 记录按键事件
+function recordKeyEvent(e) {
+    recordEvent('keypress', {
+        key: e.key,
+        keyCode: e.keyCode,
+        target: e.target.tagName
+    });
+}
+
+// 记录焦点事件
+function recordFocusEvent() {
+    recordEvent('focus', { type: 'page_focus' });
+}
+
+function recordBlurEvent() {
+    recordEvent('blur', { type: 'page_blur' });
+}
+
+// 记录测验选择
+function recordQuizSelection(e) {
+    const quizData = {
+        question: e.target.dataset.question,
+        answer: e.target.value,
+        timestamp: Date.now(),
+        timeFromStart: dataCollection.startTime ? Date.now() - dataCollection.startTime : 0
+    };
+    
+    dataCollection.quizData.push(quizData);
+    recordEvent('quiz_selection', quizData);
+}
+
+// 提交测验
+function submitQuiz() {
+    const answers = dataCollection.quizData.filter(q => q.question);
+    recordEvent('quiz_submit', {
+        totalQuestions: 2,
+        answeredQuestions: answers.length,
+        answers: answers,
+        completionTime: Date.now() - dataCollection.startTime
+    });
+    
+    alert(`测验提交成功！您回答了 ${answers.length}/2 道题目。`);
+}
+
+// 记录写作事件
+let writingTimer = null;
+function recordWritingEvent(e) {
+    const text = e.target.value;
+    const wordCount = text.length;
+    const progress = Math.min(100, (wordCount / 200) * 100);
+    
+    document.getElementById('writingProgress').style.width = progress + '%';
+    
+    // 清除之前的计时器
+    if (writingTimer) clearTimeout(writingTimer);
+    
+    // 设置新的计时器，500ms后记录
+    writingTimer = setTimeout(() => {
+        const writingData = {
+            wordCount: wordCount,
+            progress: progress,
+            timestamp: Date.now()
+        };
+        
+        dataCollection.writingData.push(writingData);
+        recordEvent('writing_progress', writingData);
+    }, 500);
+}
+
+// 记录粘贴事件
+function recordPasteEvent(e) {
+    recordEvent('paste_event', {
+        target: 'essay_input',
+        timestamp: Date.now()
+    });
+}
+
+// 生成交互网格
+function generateInteractionGrid() {
+    const grid = document.getElementById('interactionGrid');
+    grid.innerHTML = '';
+    
+    for (let i = 0; i < 48; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'heatmap-cell';
+        cell.dataset.index = i;
+        cell.addEventListener('click', handleGridClick);
+        grid.appendChild(cell);
+    }
+}
+
+// 处理网格点击
+function handleGridClick(e) {
+    const index = parseInt(e.target.dataset.index);
+    
+    // 查找现有数据
+    let cellData = dataCollection.interactionData.find(d => d.cellIndex === index);
+    
+    if (cellData) {
+        cellData.clicks++;
+    } else {
+        cellData = {
+            cellIndex: index,
+            clicks: 1,
+            firstClick: Date.now()
+        };
+        dataCollection.interactionData.push(cellData);
+    }
+    
+    // 更新视觉效果
+    const intensity = Math.min(1, cellData.clicks / 5);
+    e.target.style.backgroundColor = `rgba(67, 97, 238, ${intensity})`;
+    e.target.style.color = intensity > 0.5 ? 'white' : 'black';
+    e.target.textContent = cellData.clicks;
+    
+    recordEvent('grid_click', {
+        cellIndex: index,
+        clicks: cellData.clicks,
+        timestamp: Date.now()
+    });
+}
+
+// 清除热力图
+function clearHeatmap() {
+    dataCollection.interactionData = [];
+    document.querySelectorAll('.heatmap-cell').forEach(cell => {
+        cell.style.backgroundColor = '';
+        cell.style.color = '';
+        cell.textContent = '';
+    });
+    recordEvent('heatmap_clear', { timestamp: Date.now() });
+}
+
+// 开始专注训练
+function startFocusTraining() {
+    if (focusTimer) clearInterval(focusTimer);
+    
+    let focusStartTime = Date.now();
+    let focusScore = 0;
+    
+    document.getElementById('focusStatus').textContent = '专注训练进行中...';
+    
+    focusTimer = setInterval(() => {
+        const elapsed = Date.now() - focusStartTime;
+        const minutes = Math.floor(elapsed / 60000);
+        const seconds = Math.floor((elapsed % 60000) / 1000);
+        
+        document.getElementById('focusTimer').textContent = 
+            `专注时间: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        // 假设3分钟为满分
+        const progress = Math.min(100, (elapsed / 180000) * 100);
+        document.getElementById('focusProgress').style.width = progress + '%';
+        
+        // 记录专注数据
+        const focusData = {
+            elapsedTime: elapsed,
+            progress: progress,
+            timestamp: Date.now()
+        };
+        
+        dataCollection.focusData.push(focusData);
+        
+        if (elapsed >= 180000) { // 3分钟完成
+            clearInterval(focusTimer);
+            document.getElementById('focusStatus').textContent = '专注训练完成！';
+            recordEvent('focus_training_complete', focusData);
+        }
+    }, 1000);
+    
+    recordEvent('focus_training_start', { timestamp: focusStartTime });
+}
+
+// 记录阅读答案
+function recordReadingAnswer(e) {
+    const readingData = {
+        answer: e.target.value,
+        timestamp: Date.now(),
+        timeFromStart: dataCollection.startTime ? Date.now() - dataCollection.startTime : 0
+    };
+    
+    dataCollection.readingData.push(readingData);
+    recordEvent('reading_answer', readingData);
+}
+
+// 更新状态显示
+function updateStatusDisplay() {
+    // 会话时间
+    if (dataCollection.startTime) {
+        const elapsed = Date.now() - dataCollection.startTime;
+        const minutes = Math.floor(elapsed / 60000);
+        const seconds = Math.floor((elapsed % 60000) / 1000);
+        document.getElementById('sessionTime').textContent = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    // 总事件数
+    document.getElementById('totalEvents').textContent = dataCollection.events.length;
+    
+    // 数据大小估算
+    const dataSize = JSON.stringify(dataCollection).length;
+    document.getElementById('dataSize').textContent = 
+        dataSize > 1024 ? `${(dataSize / 1024).toFixed(1)}KB` : `${dataSize}B`;
+}
+
+// 更新会话计时器
+function updateSessionTimer() {
+    updateStatusDisplay();
+}
+
+// 显示最近事件
+function showRecentEvent(event) {
+    const popup = document.getElementById('dataPopup');
+    const content = document.getElementById('popupContent');
+    
+    const eventStr = `${new Date(event.timestamp).toLocaleTimeString()}: ${event.type}\n${JSON.stringify(event, null, 2)}`;
+    content.textContent = eventStr;
+    
+    popup.style.display = 'block';
+    
+    // 3秒后自动隐藏
+    setTimeout(() => {
+        popup.style.display = 'none';
+    }, 3000);
+}
+
+// 隐藏数据弹窗
+function hideDataPopup() {
+    document.getElementById('dataPopup').style.display = 'none';
+}
+
+// 打开数据显示窗口
+function openDisplayWindow() {
+    if (displayWindow && !displayWindow.closed) {
+        displayWindow.focus();
+        return;
+    }
+    
+    displayWindow = window.open(
+        './dashboard.html',
+        'dataDisplay',
+        'width=1200,height=800,scrollbars=yes,resizable=yes'
+    );
+    
+    // 等待窗口加载完成后发送初始数据
+    setTimeout(() => {
+        sendDataToDisplay();
+    }, 1000);
+}
+
+// 发送数据到显示页面
+function sendDataToDisplay() {
+    if (displayWindow && !displayWindow.closed) {
+        try {
+            displayWindow.postMessage({
+                type: 'dataUpdate',
+                data: dataCollection
+            }, '*');
+        } catch (error) {
+            console.warn('发送数据到显示窗口失败:', error);
+        }
+    }
+    
+    // 同时存储到localStorage
+    localStorage.setItem('educationData', JSON.stringify(dataCollection));
+}
+
+// 监听显示窗口的请求
+window.addEventListener('message', function(event) {
+    if (event.data.type === 'requestData') {
+        sendDataToDisplay();
+    }
+});
+
+// 页面卸载时清理
+window.addEventListener('beforeunload', function() {
+    if (displayWindow && !displayWindow.closed) {
+        displayWindow.postMessage({
+            type: 'collectorClosed',
+            data: {}
+        }, '*');
+    }
+});
+    </script>
+</body>
+</html>

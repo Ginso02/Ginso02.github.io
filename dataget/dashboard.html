@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据显示控制台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #4361ee;
+    --primary-light: #4895ef;
+    --secondary: #3f37c9;
+    --accent: #4cc9f0;
+    --success: #4ade80;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --gray: #64748b;
+    --gray-light: #e2e8f0;
+    --border-radius: 12px;
+    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #1a1c29 0%, #16213e 100%);
+    min-height: 100vh;
+    color: white;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-areas: 
+        "header header"
+        "sidebar main";
+    grid-template-columns: 280px 1fr;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+}
+
+.header {
+    grid-area: header;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 20px 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--danger);
+    animation: pulse 2s infinite;
+}
+
+.status-dot.connected {
+    background: var(--success);
+}
+
+.sidebar {
+    grid-area: sidebar;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    overflow-y: auto;
+}
+
+.stats-grid {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.main-content {
+    grid-area: main;
+    padding: 30px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 25px;
+    align-content: start;
+}
+
+.data-panel {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: fit-content;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.panel-badge {
+    background: var(--primary);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.data-display {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 15px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.event-stream {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.event-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.event-time {
+    color: var(--accent);
+    font-size: 0.75rem;
+    min-width: 60px;
+    font-family: monospace;
+}
+
+.event-type {
+    background: rgba(67, 97, 238, 0.3);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    min-width: 80px;
+    text-align: center;
+}
+
+.event-data {
+    flex: 1;
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.chart-container {
+    margin: 15px 0;
+    height: 200px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray);
+    position: relative;
+    overflow: hidden;
+}
+
+.activity-chart {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: end;
+    padding: 20px;
+    gap: 2px;
+}
+
+.activity-bar {
+    background: linear-gradient(to top, var(--primary), var(--accent));
+    border-radius: 2px 2px 0 0;
+    min-height: 5px;
+    flex: 1;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.activity-bar:hover {
+    opacity: 1;
+}
+
+.heatmap-visual {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 2px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.heat-cell {
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    transition: all 0.3s;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.control-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.metrics-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.metric-item {
+    text-align: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.metric-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+.progress-ring {
+    width: 80px;
+    height: 80px;
+    margin: 10px auto;
+}
+
+.progress-ring circle {
+    fill: transparent;
+    stroke-width: 4;
+    stroke-dasharray: 251.2;
+    stroke-dashoffset: 251.2;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 0.5s ease;
+}
+
+.progress-ring .bg {
+    stroke: rgba(255, 255, 255, 0.1);
+}
+
+.progress-ring .progress {
+    stroke: var(--accent);
+}
+
+.alert-panel {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    display: none;
+}
+
+.alert-panel.show {
+    display: block;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.floating-stats {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-width: 200px;
+}
+
+.no-data {
+    text-align: center;
+    color: var(--gray);
+    font-style: italic;
+    padding: 40px 20px;
+}
+
+@media (max-width: 1024px) {
+    .dashboard {
+        grid-template-areas: 
+            "header"
+            "main";
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>📊 教育数据控制台</h1>
+            <div class="connection-status">
+                <span class="status-dot" id="connectionStatus"></span>
+                <span id="connectionText">等待连接...</span>
+            </div>
+        </div>
+
+        <!-- 侧边栏统计 -->
+        <div class="sidebar">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="sessionDuration">00:00</div>
+                    <div class="stat-label">会话时长</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalEvents">0</div>
+                    <div class="stat-label">总事件数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="eventsPerMinute">0</div>
+                    <div class="stat-label">事件/分钟</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="dataTransferred">0KB</div>
+                    <div class="stat-label">数据传输</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn active" onclick="toggleAutoScroll()">自动滚动</button>
+                <button class="control-btn" onclick="exportCurrentData()">导出数据</button>
+                <button class="control-btn" onclick="clearDisplay()">清空显示</button>
+            </div>
+
+            <div class="alert-panel" id="alertPanel">
+                <strong>⚠️ 注意</strong>
+                <div id="alertMessage">检测到异常数据模式</div>
+            </div>
+        </div>
+
+        <!-- 主内容区域 -->
+        <div class="main-content">
+            <!-- 实时事件流 -->
+            <div class="data-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span>⚡</span> 实时事件流
+                    </div>
+                    <div class="panel-badge" id="eventCount">0</div>
+                </div>
+                <div class="event-stream" id="eventStream">
+                    <div class="no-data">等待数据采集...</div>
+                </div>
+            </div>
+
+            <!-- 行为分析 -->
+            <div class="data-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span>🎯</span> 行为分析
+                    </div>
+                    <div class="panel-badge" id="behaviorCount">0</div>
+                </div>
+                <div class="chart-container" id="behaviorChart">
+                    <div class="activity-chart" id="activityBars"></div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-value" id="clickCount">0</div>
+                        <div class="metric-label">点击次数</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="scrollCount">0</div>
+                        <div class="metric-label">滚动次数</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="keyCount">0</div>
+                        <div class="metric-label">按键次数</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 测验数据 -->
+            <div class="data-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span>📝</span> 测验数据
+                    </div>
+                    <div class="panel-badge" id="quizCount">0</div>
+                </div>
+                <div class="data-display" id="quizDisplay">
+                    暂无测验数据
+                </div>
+            </div>
+
+            <!-- 专注度监测 -->
+            <div class="data-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span>🧘</span> 专注度监测
+                    </div>
+                    <div class="panel-badge" id="focusScore">0%</div>
+                </div>
+                <div style="text-align: center;">
+                    <svg class="progress-ring" viewBox="0 0 100 100">
+                        <circle class="bg" cx="50" cy="50" r="40"></circle>
+                        <circle class="progress" cx="50" cy="50" r="40" id="focusRing"></circle>
+                    </svg>
+                </div>
+                <div class="data-display" id="focusDisplay">
+                    暂无专注度数据
+                </div>
+            </div>
+
+            <!-- 写作分析 -->
+            <div class="data-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span>✍️</span> 写作分析
+                    </div>
+                    <div class="panel-badge" id="writingProgress">0%</div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-value" id="wordCount">0</div>
+                        <div class="metric-label">字数</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="writingSpeed">0</div>
+                        <div class="metric-label">字/分钟</div>
+                    </div>
+                </div>
+                <div class="data-display" id="writingDisplay">
+                    暂无写作数据
+                </div>
+            </div>
+
+            <!-- 交互热力图 -->
+            <div class="data-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span>🔥</span> 交互热力图
+                    </div>
+                    <div class="panel-badge" id="interactionCount">0</div>
+                </div>
+                <div class="heatmap-visual" id="heatmapDisplay">
+                    <!-- 将由JavaScript生成 -->
+                </div>
+                <div class="data-display" id="heatmapData">
+                    暂无交互数据
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 浮动统计 -->
+    <div class="floating-stats">
+        <div style="font-weight: 600; margin-bottom: 8px;">实时统计</div>
+        <div>更新频率: <span id="updateRate">0/秒</span></div>
+        <div>数据延迟: <span id="dataLatency">0ms</span></div>
+    </div>
+
+    <script>
+// 全局变量
+let currentData = null;
+let autoScroll = true;
+let updateCount = 0;
+let lastUpdateTime = Date.now();
+let dataBuffer = [];
+
+// 页面加载初始化
+window.onload = function() {
+    initializeDashboard();
+    requestDataFromCollector();
+    
+    // 初始化热力图网格
+    initializeHeatmap();
+    
+    // 定期更新统计
+    setInterval(updateStats, 1000);
+    setInterval(updateRate, 1000);
+};
+
+// 初始化仪表板
+function initializeDashboard() {
+    console.log('数据显示控制台已启动');
+    
+    // 监听来自采集页面的消息
+    window.addEventListener('message', handleDataMessage);
+    
+    // 检查localStorage中的数据
+    checkStoredData();
+}
+
+// 处理来自采集页面的消息
+function handleDataMessage(event) {
+    if (event.data.type === 'dataUpdate') {
+        updateConnectionStatus(true);
+        processIncomingData(event.data.data);
+    } else if (event.data.type === 'collectorClosed') {
+        updateConnectionStatus(false);
+    }
+}
+
+// 请求采集页面数据
+function requestDataFromCollector() {
+    if (window.opener && !window.opener.closed) {
+        window.opener.postMessage({
+            type: 'requestData'
+        }, '*');
+    }
+}
+
+// 检查本地存储的数据
+function checkStoredData() {
+    const storedData = localStorage.getItem('educationData');
+    if (storedData) {
+        try {
+            const data = JSON.parse(storedData);
+            processIncomingData(data);
+            updateConnectionStatus(true);
+        } catch (error) {
+            console.warn('解析存储数据失败:', error);
+        }
+    }
+    
+    // 定期检查更新
+    setInterval(checkStoredData, 2000);
+}
+
+// 更新连接状态
+function updateConnectionStatus(connected) {
+    const statusDot = document.getElementById('connectionStatus');
+    const statusText = document.getElementById('connectionText');
+    
+    if (connected) {
+        statusDot.classList.add('connected');
+        statusText.textContent = '实时连接';
+    } else {
+        statusDot.classList.remove('connected');
+        statusText.textContent = '连接断开';
+    }
+}
+
+// 处理接收到的数据
+function processIncomingData(data) {
+    currentData = data;
+    updateCount++;
+    
+    // 更新各个面板
+    updateEventStream(data);
+    updateBehaviorAnalysis(data);
+    updateQuizData(data);
+    updateFocusData(data);
+    updateWritingData(data);
+    updateInteractionHeatmap(data);
+    updateSidebarStats(data);
+}
+
+// 更新事件流
+function updateEventStream(data) {
+    const eventStream = document.getElementById('eventStream');
+    const eventCount = document.getElementById('eventCount');
+    
+    if (!data.events || data.events.length === 0) {
+        eventStream.innerHTML = '<div class="no-data">暂无事件数据</div>';
+        eventCount.textContent = '0';
+        return;
+    }
+    
+    eventCount.textContent = data.events.length;
+    
+    // 显示最近的20个事件
+    const recentEvents = data.events.slice(-20).reverse();
+    
+    eventStream.innerHTML = recentEvents.map(event => `
+        <div class="event-item">
+            <div class="event-time">${new Date(event.timestamp).toLocaleTimeString()}</div>
+            <div class="event-type">${event.type}</div>
+            <div class="event-data">${formatEventData(event)}</div>
+        </div>
+    `).join('');
+    
+    if (autoScroll) {
+        eventStream.scrollTop = 0;
+    }
+}
+
+// 格式化事件数据
+function formatEventData(event) {
+    switch (event.type) {
+        case 'click':
+            return `${event.element} (${event.x}, ${event.y})`;
+        case 'scroll':
+            return `Y: ${event.scrollY}px`;
+        case 'quiz_selection':
+            return `Q${event.question}: ${event.answer}`;
+        case 'writing_progress':
+            return `${event.wordCount} 字 (${event.progress.toFixed(1)}%)`;
+        case 'grid_click':
+            return `Cell ${event.cellIndex} (${event.clicks} clicks)`;
+        case 'focus_training_start':
+            return '专注训练开始';
+        case 'session_start':
+            return '会话开始';
+        default:
+            return JSON.stringify(event).substring(0, 50) + '...';
+    }
+}
+
+// 更新行为分析
+function updateBehaviorAnalysis(data) {
+    if (!data.events) return;
+    
+    const events = data.events;
+    const clickCount = events.filter(e => e.type === 'click').length;
+    const scrollCount = events.filter(e => e.type === 'scroll').length;
+    const keyCount = events.filter(e => e.type === 'keypress').length;
+    
+    document.getElementById('clickCount').textContent = clickCount;
+    document.getElementById('scrollCount').textContent = scrollCount;
+    document.getElementById('keyCount').textContent = keyCount;
+    document.getElementById('behaviorCount').textContent = clickCount + scrollCount + keyCount;
+    
+    // 更新活动图表
+    updateActivityChart(events);
+}
+
+// 更新活动图表
+function updateActivityChart(events) {
+    const activityBars = document.getElementById('activityBars');
+    
+    // 按分钟分组事件
+    const now = Date.now();
+    const minuteGroups = {};
+    
+    for (let i = 0; i < 20; i++) {
+        const minute = now - (i * 60000);
+        minuteGroups[minute] = 0;
+    }
+    
+    events.forEach(event => {
+        const eventMinute = Math.floor(event.timestamp / 60000) * 60000;
+        if (minuteGroups.hasOwnProperty(eventMinute)) {
+            minuteGroups[eventMinute]++;
+        }
+    });
+    
+    const maxCount = Math.max(...Object.values(minuteGroups), 1);
+    
+    activityBars.innerHTML = Object.values(minuteGroups)
+        .reverse()
+        .map(count => `
+            <div class="activity-bar" style="height: ${(count / maxCount) * 100}%" title="${count} events"></div>
+        `).join('');
+}
+
+// 更新测验数据
+function updateQuizData(data) {
+    const quizDisplay = document.getElementById('quizDisplay');
+    const quizCount = document.getElementById('quizCount');
+    
+    if (!data.quizData || data.quizData.length === 0) {
+        quizDisplay.textContent = '暂无测验数据';
+        quizCount.textContent = '0';
+        return;
+    }
+    
+    quizCount.textContent = data.quizData.length;
+    
+    const quizText = data.quizData.map(quiz => {
+        if (quiz.question && quiz.answer) {
+            return `问题 ${quiz.question}: ${quiz.answer} (${(quiz.timeFromStart / 1000).toFixed(1)}s)`;
+        }
+        return JSON.stringify(quiz);
+    }).join('\n');
+    
+    quizDisplay.textContent = quizText;
+}
+
+// 更新专注度数据
+function updateFocusData(data) {
+    const focusDisplay = document.getElementById('focusDisplay');
+    const focusScore = document.getElementById('focusScore');
+    const focusRing = document.getElementById('focusRing');
+    
+    if (!data.focusData || data.focusData.length === 0) {
+        focusDisplay.textContent = '暂无专注度数据';
+        focusScore.textContent = '0%';
+        focusRing.style.strokeDashoffset = '251.2';
+        return;
+    }
+    
+    const latestFocus = data.focusData[data.focusData.length - 1];
+    const progress = latestFocus.progress || 0;
+    
+    focusScore.textContent = `${Math.round(progress)}%`;
+    
+    // 更新环形进度条
+    const offset = 251.2 - (251.2 * progress / 100);
+    focusRing.style.strokeDashoffset = offset;
+    
+    // 显示专注度历史
+    const focusText = data.focusData.slice(-5).map(focus => {
+        return `${new Date(focus.timestamp).toLocaleTimeString()}: ${(focus.progress || 0).toFixed(1)}%`;
+    }).join('\n');
+    
+    focusDisplay.textContent = focusText;
+}
+
+// 更新写作数据
+function updateWritingData(data) {
+    const writingDisplay = document.getElementById('writingDisplay');
+    const writingProgress = document.getElementById('writingProgress');
+    const wordCount = document.getElementById('wordCount');
+    const writingSpeed = document.getElementById('writingSpeed');
+    
+    if (!data.writingData || data.writingData.length === 0) {
+        writingDisplay.textContent = '暂无写作数据';
+        writingProgress.textContent = '0%';
+        wordCount.textContent = '0';
+        writingSpeed.textContent = '0';
+        return;
+    }
+    
+    const latestWriting = data.writingData[data.writingData.length - 1];
+    
+    writingProgress.textContent = `${Math.round(latestWriting.progress || 0)}%`;
+    wordCount.textContent = latestWriting.wordCount || 0;
+    
+    // 计算写作速度
+    if (data.writingData.length > 1) {
+        const firstEntry = data.writingData[0];
+        const timeElapsed = (latestWriting.timestamp - firstEntry.timestamp) / 60000; // 分钟
+        const speed = timeElapsed > 0 ? Math.round(latestWriting.wordCount / timeElapsed) : 0;
+        writingSpeed.textContent = speed;
+    }
+    
+    const writingText = data.writingData.slice(-5).map(writing => {
+        return `${new Date(writing.timestamp).toLocaleTimeString()}: ${writing.wordCount} 字 (${writing.progress.toFixed(1)}%)`;
+    }).join('\n');
+    
+    writingDisplay.textContent = writingText;
+}
+
+// 初始化热力图
+function initializeHeatmap() {
+    const heatmapDisplay = document.getElementById('heatmapDisplay');
+    heatmapDisplay.innerHTML = '';
+    
+    for (let i = 0; i < 48; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'heat-cell';
+        cell.dataset.index = i;
+        heatmapDisplay.appendChild(cell);
+    }
+}
+
+// 更新交互热力图
+function updateInteractionHeatmap(data) {
+    const heatmapData = document.getElementById('heatmapData');
+    const interactionCount = document.getElementById('interactionCount');
+    
+    if (!data.interactionData || data.interactionData.length === 0) {
+        heatmapData.textContent = '暂无交互数据';
+        interactionCount.textContent = '0';
+        // 重置所有单元格
+        document.querySelectorAll('.heat-cell').forEach(cell => {
+            cell.style.backgroundColor = '';
+            cell.textContent = '';
+        });
+        return;
+    }
+    
+    const totalClicks = data.interactionData.reduce((sum, d) => sum + d.clicks, 0);
+    interactionCount.textContent = totalClicks;
+    
+    // 找出最大点击数用于归一化
+    const maxClicks = Math.max(...data.interactionData.map(d => d.clicks));
+    
+    // 重置所有单元格
+    document.querySelectorAll('.heat-cell').forEach(cell => {
+        cell.style.backgroundColor = '';
+        cell.textContent = '';
+    });
+    
+    // 更新有数据的单元格
+    data.interactionData.forEach(item => {
+        const cell = document.querySelector(`[data-index="${item.cellIndex}"]`);
+        if (cell) {
+            const intensity = item.clicks / maxClicks;
+            cell.style.backgroundColor = `rgba(76, 201, 240, ${intensity})`;
+            cell.style.color = intensity > 0.5 ? 'white' : 'black';
+            cell.textContent = item.clicks;
+        }
+    });
+    
+    // 显示热力图统计
+    const heatmapText = `总点击: ${totalClicks}\n活跃区域: ${data.interactionData.length}\n最高点击: ${maxClicks}`;
+    heatmapData.textContent = heatmapText;
+}
+
+// 更新侧边栏统计
+function updateSidebarStats(data) {
+    // 会话时长
+    if (data.startTime) {
+        const duration = Date.now() - data.startTime;
+        const minutes = Math.floor(duration / 60000);
+        const seconds = Math.floor((duration % 60000) / 1000);
+        document.getElementById('sessionDuration').textContent = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    // 总事件数
+    document.getElementById('totalEvents').textContent = data.events ? data.events.length : 0;
+    
+    // 事件/分钟
+    if (data.startTime && data.events) {
+        const durationMinutes = (Date.now() - data.startTime) / 60000;
+        const eventsPerMinute = durationMinutes > 0 ? Math.round(data.events.length / durationMinutes) : 0;
+        document.getElementById('eventsPerMinute').textContent = eventsPerMinute;
+    }
+    
+    // 数据大小
+    const dataSize = JSON.stringify(data).length;
+    document.getElementById('dataTransferred').textContent = 
+        dataSize > 1024 ? `${(dataSize / 1024).toFixed(1)}KB` : `${dataSize}B`;
+}
+
+// 更新统计信息
+function updateStats() {
+    // 更新浮动统计的延迟显示
+    const latency = Date.now() - lastUpdateTime;
+    document.getElementById('dataLatency').textContent = latency + 'ms';
+}
+
+// 更新速率统计
+function updateRate() {
+    document.getElementById('updateRate').textContent = updateCount + '/秒';
+    updateCount = 0;
+}
+
+// 切换自动滚动
+function toggleAutoScroll() {
+    autoScroll = !autoScroll;
+    const btn = event.target;
+    btn.textContent = autoScroll ? '自动滚动' : '手动滚动';
+    btn.classList.toggle('active', autoScroll);
+}
+
+// 导出当前数据
+function exportCurrentData() {
+    if (!currentData) {
+        alert('暂无数据可导出');
+        return;
+    }
+    
+    const exportData = {
+        exportTime: new Date().toISOString(),
+        ...currentData
+    };
+    
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+        type: 'application/json'
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dashboard_export_${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// 清空显示
+function clearDisplay() {
+    if (confirm('确定要清空所有显示数据吗？')) {
+        currentData = null;
+        
+        // 清空所有显示区域
+        document.querySelectorAll('.data-display').forEach(display => {
+            display.textContent = '暂无数据';
+        });
+        
+        document.querySelectorAll('.panel-badge').forEach(badge => {
+            badge.textContent = '0';
+        });
+        
+        document.querySelectorAll('.metric-value').forEach(metric => {
+            metric.textContent = '0';
+        });
+        
+        document.getElementById('eventStream').innerHTML = '<div class="no-data">暂无事件数据</div>';
+        document.getElementById('activityBars').innerHTML = '';
+        document.getElementById('focusRing').style.strokeDashoffset = '251.2';
+        
+        initializeHeatmap();
+        
+        console.log('显示已清空');
+    }
+}
+
+// 显示警告
+function showAlert(message) {
+    const alertPanel = document.getElementById('alertPanel');
+    const alertMessage = document.getElementById('alertMessage');
+    
+    alertMessage.textContent = message;
+    alertPanel.classList.add('show');
+    
+    setTimeout(() => {
+        alertPanel.classList.remove('show');
+    }, 5000);
+}
+
+// 页面关闭时清理
+window.addEventListener('beforeunload', function() {
+    if (window.opener && !window.opener.closed) {
+        window.opener.postMessage({
+            type: 'displayClosed'
+        }, '*');
+    }
+});
+    </script>
+</body>
+</html>
