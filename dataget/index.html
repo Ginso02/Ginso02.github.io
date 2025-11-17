@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教育数据采集与AI分析平台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #4361ee;
+    --primary-light: #4895ef;
+    --secondary: #3f37c9;
+    --accent: #4cc9f0;
+    --success: #4ade80;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --gray: #64748b;
+    --gray-light: #e2e8f0;
+    --border-radius: 12px;
+    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+    min-height: 100vh;
+    color: var(--dark);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.header h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+    letter-spacing: -0.5px;
+}
+
+.header p {
+    font-size: 1.2rem;
+    color: var(--gray);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.demo-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.demo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+
+.demo-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+}
+
+.demo-card h3 {
+    color: var(--dark);
+    margin-bottom: 18px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.demo-card h3 .icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(67, 97, 238, 0.1);
+    color: var(--primary);
+}
+
+.demo-card > p {
+    color: var(--gray);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.data-display {
+    background: var(--light);
+    border-radius: 10px;
+    padding: 18px;
+    margin: 18px 0;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9rem;
+    max-height: 220px;
+    overflow-y: auto;
+    border-left: 4px solid var(--primary);
+    transition: var(--transition);
+}
+
+.data-display:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.quiz-container {
+    margin: 18px 0;
+}
+
+.question {
+    margin-bottom: 18px;
+    padding: 18px;
+    background: rgba(67, 97, 238, 0.05);
+    border-radius: 10px;
+    border-left: 4px solid var(--primary);
+}
+
+.options label {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 8px;
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.options label:hover {
+    background-color: rgba(67, 97, 238, 0.08);
+    border-color: rgba(67, 97, 238, 0.2);
+}
+
+.options input {
+    margin-right: 12px;
+    transform: scale(1.2);
+}
+
+button {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: var(--transition);
+    margin: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(67, 97, 238, 0.3);
+}
+
+button.secondary {
+    background: white;
+    color: var(--primary);
+    border: 1px solid var(--primary-light);
+}
+
+.timer {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-align: center;
+    margin: 12px 0;
+    padding: 10px;
+    background: rgba(67, 97, 238, 0.05);
+    border-radius: 8px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: var(--gray-light);
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), #22c55e);
+    transition: width 0.5s ease;
+    border-radius: 5px;
+}
+
+.typing-area {
+    width: 100%;
+    min-height: 120px;
+    border: 2px solid var(--gray-light);
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    resize: vertical;
+    transition: var(--transition);
+    background: white;
+}
+
+.typing-area:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+.status {
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status.online {
+    background: rgba(74, 222, 128, 0.15);
+    color: #166534;
+    border-left: 4px solid var(--success);
+}
+
+.status.idle {
+    background: rgba(245, 158, 11, 0.15);
+    color: #92400e;
+    border-left: 4px solid var(--warning);
+}
+
+.heatmap {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    margin: 18px 0;
+    padding: 10px;
+    background: var(--light);
+    border-radius: 10px;
+}
+
+.heatmap-cell {
+    aspect-ratio: 1;
+    background: var(--gray-light);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.1);
+}
+
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 18px;
+    margin: 18px 0;
+}
+
+.metric-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    padding: 18px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+    transition: var(--transition);
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.summary-panel {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 32px;
+    margin-top: 30px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+
+.summary-panel h2 {
+    color: var(--dark);
+    margin-bottom: 24px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* AI分析面板样式 */
+.ai-panel {
+    grid-column: span 1;
+}
+
+.ai-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.ai-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    font-size: 0.85rem;
+    text-align: center;
+    height: auto;
+    min-height: 70px;
+}
+
+.ai-btn.primary {
+    grid-column: span 2;
+    flex-direction: row;
+    min-height: 60px;
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.ai-btn.primary .btn-icon {
+    margin-bottom: 0;
+    margin-right: 8px;
+}
+
+.ai-analysis-container {
+    position: relative;
+    min-height: 200px;
+    margin-bottom: 20px;
+}
+
+.ai-response {
+    background: var(--light);
+    border-radius: 10px;
+    padding: 20px;
+    border-left: 4px solid var(--primary);
+    min-height: 200px;
+    transition: var(--transition);
+}
+
+.ai-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: var(--gray);
+}
+
+.ai-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
+
+.ai-subtext {
+    font-size: 0.9rem;
+    margin-top: 5px;
+    opacity: 0.7;
+}
+
+.ai-loading {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(67, 97, 238, 0.2);
+    border-left: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.api-settings {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--gray-light);
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.setting-item label {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.setting-item select {
+    padding: 8px 12px;
+    border: 1px solid var(--gray-light);
+    border-radius: 6px;
+    background: white;
+    font-family: 'Inter', sans-serif;
+}
+
+/* AI响应内容样式 */
+.ai-analysis-result {
+    animation: fadeIn 0.5s ease;
+}
+
+.ai-analysis-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ai-analysis-content {
+    line-height: 1.6;
+}
+
+.ai-suggestion {
+    background: rgba(67, 97, 238, 0.05);
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    border-left: 3px solid var(--primary);
+}
+
+.ai-suggestion-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--dark);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.recording {
+    animation: pulse 2s infinite;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.demo-card, .summary-panel {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    
+    .header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .demo-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .ai-controls {
+        grid-template-columns: 1fr;
+    }
+    
+    .ai-btn.primary {
+        grid-column: span 1;
+    }
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>教育数据采集与AI分析平台</h1>
+            <p>展示前端可实现的各种教育数据采集技术，并集成AI分析功能</p>
+        </div>
+
+        <div class="demo-grid">
+            <!-- 学习行为追踪 -->
+            <div class="demo-card">
+                <h3><span class="icon">📊</span>学习行为追踪</h3>
+                <p>实时监测用户的页面交互行为，分析学习习惯</p>
+                <div class="data-display" id="behaviorData">
+                    等待用户交互...
+                </div>
+                <div class="metrics">
+                    <div class="metric-card">
+                        <div class="metric-value" id="clickCount">0</div>
+                        <div class="metric-label">点击次数</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="scrollDistance">0</div>
+                        <div class="metric-label">滚动距离</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="timeOnPage">0</div>
+                        <div class="metric-label">页面停留(秒)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 答题数据采集 -->
+            <div class="demo-card">
+                <h3><span class="icon">✏️</span>答题行为分析</h3>
+                <div class="quiz-container">
+                    <div class="timer" id="quizTimer">时间: 00:00</div>
+                    <div class="question">
+                        <p><strong>题目:</strong> 以下哪个是前端框架？</p>
+                        <div class="options">
+                            <label><input type="radio" name="q1" value="A" data-question="1"> A. React</label>
+                            <label><input type="radio" name="q1" value="B" data-question="1"> B. MySQL</label>
+                            <label><input type="radio" name="q1" value="C" data-question="1"> C. Python</label>
+                            <label><input type="radio" name="q1" value="D" data-question="1"> D. Docker</label>
+                        </div>
+                    </div>
+                    <button onclick="submitQuiz()">提交答案</button>
+                </div>
+                <div class="data-display" id="quizData">
+                    答题数据将在这里显示...
+                </div>
+            </div>
+
+            <!-- 学习专注度监测 -->
+            <div class="demo-card">
+                <h3><span class="icon">🎯</span>专注度监测</h3>
+                <p>基于页面焦点和用户活跃度判断专注状态</p>
+                <div class="status" id="focusStatus">检测中...</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="focusProgress" style="width: 0%"></div>
+                </div>
+                <div class="data-display" id="focusData">
+                    专注度数据记录中...
+                </div>
+            </div>
+
+            <!-- AI分析面板 -->
+            <div class="demo-card ai-panel">
+                <h3><span class="icon">🤖</span>AI学习分析</h3>
+                <p>基于收集的数据提供个性化学习建议</p>
+                
+                <div class="ai-controls">
+                    <button id="analyzeBehavior" class="ai-btn">
+                        <span class="btn-icon">📊</span> 分析学习行为
+                    </button>
+                    <button id="analyzeFocus" class="ai-btn">
+                        <span class="btn-icon">🎯</span> 分析专注度
+                    </button>
+                    <button id="analyzeQuiz" class="ai-btn">
+                        <span class="btn-icon">✏️</span> 分析答题模式
+                    </button>
+                    <button id="comprehensiveAnalysis" class="ai-btn primary">
+                        <span class="btn-icon">🧠</span> 综合学习分析
+                    </button>
+                </div>
+                
+                <div class="ai-analysis-container">
+                    <div class="ai-response" id="aiResponse">
+                        <div class="ai-placeholder">
+                            <div class="ai-icon">🤖</div>
+                            <p>点击上方按钮开始AI分析</p>
+                            <p class="ai-subtext">AI将根据您的学习数据提供个性化建议</p>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-loading" id="aiLoading">
+                        <div class="loading-spinner"></div>
+                        <p>AI正在分析您的学习数据...</p>
+                    </div>
+                </div>
+                
+                <div class="api-settings">
+                    <div class="setting-item">
+                        <label for="apiProvider">选择AI服务:</label>
+                        <select id="apiProvider">
+                            <option value="deepseek">DeepSeek</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 学习时间统计 -->
+            <div class="demo-card">
+                <h3><span class="icon">⏱️</span>学习时间统计</h3>
+                <p>记录和分析学习时间分布，优化学习效率</p>
+                <div class="metrics">
+                    <div class="metric-card">
+                        <div class="metric-value" id="activeTime">0</div>
+                        <div class="metric-label">活跃时间(分)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="idleTime">0</div>
+                        <div class="metric-label">空闲时间(分)</div>
+                    </div>
+                </div>
+                <button onclick="startStudySession()">开始学习</button>
+                <button class="secondary" onclick="pauseStudySession()">暂停</button>
+                <button class="secondary" onclick="endStudySession()">结束</button>
+            </div>
+
+            <!-- 输入行为分析 -->
+            <div class="demo-card">
+                <h3><span class="icon">⌨️</span>输入行为分析</h3>
+                <p>分析用户的打字模式和思考过程，评估认知负荷</p>
+                <textarea class="typing-area" id="typingArea" placeholder="在这里输入内容，系统会分析您的输入行为..."></textarea>
+                <div class="metrics">
+                    <div class="metric-card">
+                        <div class="metric-value" id="wpm">0</div>
+                        <div class="metric-label">字/分钟</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="pauseCount">0</div>
+                        <div class="metric-label">思考停顿</div>
+                    </div>
+                </div>
+                <div class="data-display" id="typingData">
+                    输入分析数据...
+                </div>
+            </div>
+
+            <!-- 点击热力图 -->
+            <div class="demo-card">
+                <h3><span class="icon">🔥</span>交互热力图</h3>
+                <p>可视化用户的点击分布模式，优化界面设计</p>
+                <div class="heatmap" id="heatmap"></div>
+                <button onclick="resetHeatmap()">重置热力图</button>
+                <div class="data-display" id="heatmapData">
+                    热力图数据统计...
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据汇总面板 -->
+        <div class="summary-panel">
+            <h2><span>📈</span>数据采集汇总</h2>
+            <div class="data-display" id="summaryData" style="max-height: 300px;">
+                综合数据分析结果将在这里显示...
+            </div>
+            <div style="margin-top: 20px; text-align: center;">
+                <button onclick="exportData()">导出数据</button>
+                <button onclick="generateReport()">生成报告</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// 全局数据存储
+const dataCollection = {
+    behaviors: [],
+    quizData: [],
+    focusData: [],
+    timeData: [],
+    typingData: [],
+    heatmapData: [],
+    sessionStart: Date.now()
+};
+
+// DeepSeek API配置
+const DEEPSEEK_CONFIG = {
+    apiKey: "sk-918e4cb06199406694dc0c1fcb54749a",
+    baseURL: "https://api.deepseek.com/v1/chat/completions"
+};
+
+// 页面加载时初始化
+window.onload = function() {
+    initializeDemos();
+    updateSummary();
+    
+    // 初始化AI分析功能
+    initAIAnalysis();
+};
+
+function initializeDemos() {
+    // 初始化行为追踪
+    initBehaviorTracking();
+    // 初始化专注度监测
+    initFocusTracking();
+    // 初始化输入分析
+    initTypingAnalysis();
+    // 初始化热力图
+    initHeatmap();
+    // 初始化时间统计
+    initTimeTracking();
+    // 初始化答题计时
+    initQuizTimer();
+}
+
+// 1. 学习行为追踪
+function initBehaviorTracking() {
+    let clickCount = 0;
+    let scrollDistance = 0;
+    let pageStartTime = Date.now();
+
+    // 点击事件监听
+    document.addEventListener('click', function(e) {
+        clickCount++;
+        const behaviorEvent = {
+            type: 'click',
+            timestamp: Date.now(),
+            element: e.target.tagName,
+            x: e.clientX,
+            y: e.clientY
+        };
+        dataCollection.behaviors.push(behaviorEvent);
+        
+        document.getElementById('clickCount').textContent = clickCount;
+        updateBehaviorDisplay();
+    });
+
+    // 滚动事件监听
+    let lastScrollTop = window.pageYOffset;
+    window.addEventListener('scroll', function() {
+        const currentScroll = window.pageYOffset;
+        scrollDistance += Math.abs(currentScroll - lastScrollTop);
+        lastScrollTop = currentScroll;
+        
+        document.getElementById('scrollDistance').textContent = Math.round(scrollDistance);
+        
+        dataCollection.behaviors.push({
+            type: 'scroll',
+            timestamp: Date.now(),
+            distance: scrollDistance,
+            position: currentScroll
+        });
+        updateBehaviorDisplay();
+    });
+
+    // 更新页面停留时间
+    setInterval(() => {
+        const timeOnPage = Math.round((Date.now() - pageStartTime) / 1000);
+        document.getElementById('timeOnPage').textContent = timeOnPage;
+    }, 1000);
+}
+
+function updateBehaviorDisplay() {
+    const recent = dataCollection.behaviors.slice(-5);
+    const display = recent.map(event => 
+        `${new Date(event.timestamp).toLocaleTimeString()}: ${event.type}`
+    ).join('\n');
+    document.getElementById('behaviorData').textContent = display || '等待用户交互...';
+}
+
+// 2. 答题数据采集
+let quizStartTime = Date.now();
+let quizTimer;
+
+function initQuizTimer() {
+    quizTimer = setInterval(updateQuizTimer, 1000);
+}
+
+function updateQuizTimer() {
+    const elapsed = Date.now() - quizStartTime;
+    const minutes = Math.floor(elapsed / 60000);
+    const seconds = Math.floor((elapsed % 60000) / 1000);
+    document.getElementById('quizTimer').textContent = 
+        `时间: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// 监听答题选择
+document.querySelectorAll('input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        const answerData = {
+            question: this.dataset.question,
+            answer: this.value,
+            timestamp: Date.now(),
+            timeSpent: Date.now() - quizStartTime
+        };
+        dataCollection.quizData.push(answerData);
+        updateQuizDisplay();
+    });
+});
+
+function submitQuiz() {
+    const submission = {
+        type: 'submit',
+        timestamp: Date.now(),
+        totalTime: Date.now() - quizStartTime,
+        answers: dataCollection.quizData.filter(d => d.question)
+    };
+    dataCollection.quizData.push(submission);
+    updateQuizDisplay();
+    alert('答题数据已记录！');
+}
+
+function updateQuizDisplay() {
+    const display = dataCollection.quizData.map(data => 
+        `题目${data.question || '?'}: ${data.answer || data.type} (${(data.timeSpent/1000).toFixed(1)}s)`
+    ).join('\n');
+    document.getElementById('quizData').textContent = display || '答题数据将在这里显示...';
+}
+
+// 3. 专注度监测
+function initFocusTracking() {
+    let focusScore = 0;
+    let isActive = true;
+    let lastActivity = Date.now();
+
+    // 页面焦点事件
+    window.addEventListener('focus', () => {
+        isActive = true;
+        dataCollection.focusData.push({
+            type: 'focus',
+            timestamp: Date.now()
+        });
+        updateFocusStatus();
+    });
+
+    window.addEventListener('blur', () => {
+        isActive = false;
+        dataCollection.focusData.push({
+            type: 'blur',
+            timestamp: Date.now()
+        });
+        updateFocusStatus();
+    });
+
+    // 鼠标移动检测活跃度
+    document.addEventListener('mousemove', () => {
+        lastActivity = Date.now();
+    });
+
+    // 定期更新专注度
+    setInterval(() => {
+        const timeSinceActivity = Date.now() - lastActivity;
+        const isIdle = timeSinceActivity > 10000; // 10秒无活动视为空闲
+        
+        if (isActive && !isIdle) {
+            focusScore = Math.min(100, focusScore + 2);
+        } else {
+            focusScore = Math.max(0, focusScore - 1);
+        }
+        
+        updateFocusProgress(focusScore);
+        updateFocusStatus();
+    }, 1000);
+}
+
+function updateFocusStatus() {
+    const status = document.getElementById('focusStatus');
+    const recent = dataCollection.focusData.slice(-1)[0];
+    
+    if (!recent || recent.type === 'focus') {
+        status.textContent = '专注中 🎯';
+        status.className = 'status online';
+    } else {
+        status.textContent = '注意力分散 ⚠️';
+        status.className = 'status idle';
+    }
+}
+
+function updateFocusProgress(score) {
+    document.getElementById('focusProgress').style.width = score + '%';
+    
+    const focusRecord = {
+        timestamp: Date.now(),
+        focusScore: score,
+        status: score > 70 ? 'focused' : score > 30 ? 'normal' : 'distracted'
+    };
+    dataCollection.focusData.push(focusRecord);
+    
+    const display = dataCollection.focusData.slice(-3).map(data => 
+        `${new Date(data.timestamp).toLocaleTimeString()}: ${data.status} (${data.focusScore || 'N/A'})`
+    ).join('\n');
+    document.getElementById('focusData').textContent = display;
+}
+
+// 4. 学习时间统计
+let studySession = {
+    isActive: false,
+    startTime: null,
+    activeTime: 0,
+    idleTime: 0
+};
+
+function initTimeTracking() {
+    updateTimeDisplay();
+}
+
+function startStudySession() {
+    studySession.isActive = true;
+    studySession.startTime = Date.now();
+    dataCollection.timeData.push({
+        type: 'session_start',
+        timestamp: Date.now()
+    });
+    updateTimeDisplay();
+}
+
+function pauseStudySession() {
+    if (studySession.isActive) {
+        const sessionTime = Date.now() - studySession.startTime;
+        studySession.activeTime += sessionTime;
+        studySession.isActive = false;
+        dataCollection.timeData.push({
+            type: 'session_pause',
+            timestamp: Date.now(),
+            sessionDuration: sessionTime
+        });
+        updateTimeDisplay();
+    }
+}
+
+function endStudySession() {
+    if (studySession.isActive) {
+        pauseStudySession();
+    }
+    dataCollection.timeData.push({
+        type: 'session_end',
+        timestamp: Date.now(),
+        totalActive: studySession.activeTime,
+        totalIdle: studySession.idleTime
+    });
+    alert('学习会话已结束！');
+}
+
+function updateTimeDisplay() {
+    document.getElementById('activeTime').textContent = 
+        Math.round(studySession.activeTime / 60000);
+    document.getElementById('idleTime').textContent = 
+        Math.round(studySession.idleTime / 60000);
+}
+
+// 5. 输入行为分析
+function initTypingAnalysis() {
+    const textArea = document.getElementById('typingArea');
+    let typingStart = Date.now();
+    let lastKeystroke = Date.now();
+    let keystrokes = 0;
+    let pauses = 0;
+    let wordCount = 0;
+
+    textArea.addEventListener('input', function(e) {
+        const currentTime = Date.now();
+        const timeSinceLastKey = currentTime - lastKeystroke;
+        
+        keystrokes++;
+        
+        // 检测思考停顿（大于2秒的间隔）
+        if (timeSinceLastKey > 2000) {
+            pauses++;
+        }
+        
+        // 计算打字速度
+        const timeElapsed = (currentTime - typingStart) / 60000; // 分钟
+        wordCount = this.value.split(/\s+/).filter(word => word.length > 0).length;
+        const wpm = timeElapsed > 0 ? Math.round(wordCount / timeElapsed) : 0;
+        
+        // 更新显示
+        document.getElementById('wpm').textContent = wpm;
+        document.getElementById('pauseCount').textContent = pauses;
+        
+        // 记录数据
+        dataCollection.typingData.push({
+            timestamp: currentTime,
+            keystroke: keystrokes,
+            wpm: wpm,
+            pauses: pauses,
+            wordCount: wordCount
+        });
+        
+        lastKeystroke = currentTime;
+        updateTypingDisplay();
+    });
+}
+
+function updateTypingDisplay() {
+    const recent = dataCollection.typingData.slice(-1)[0];
+    if (recent) {
+        document.getElementById('typingData').textContent = 
+            `按键总数: ${recent.keystroke} | 当前速度: ${recent.wpm} 字/分钟 | 思考停顿: ${recent.pauses} 次`;
+    }
+}
+
+// 6. 交互热力图
+function initHeatmap() {
+    const heatmap = document.getElementById('heatmap');
+    
+    // 创建10x10网格
+    for (let i = 0; i < 100; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'heatmap-cell';
+        cell.dataset.index = i;
+        cell.addEventListener('click', handleHeatmapClick);
+        heatmap.appendChild(cell);
+    }
+    
+    updateHeatmapDisplay();
+}
+
+function handleHeatmapClick(e) {
+    const index = parseInt(e.target.dataset.index);
+    const existing = dataCollection.heatmapData.find(d => d.cell === index);
+    
+    if (existing) {
+        existing.clicks++;
+    } else {
+        dataCollection.heatmapData.push({
+            cell: index,
+            clicks: 1,
+            timestamp: Date.now()
+        });
+    }
+    
+    updateHeatmapVisual();
+    updateHeatmapDisplay();
+}
+
+function updateHeatmapVisual() {
+    const maxClicks = Math.max(...dataCollection.heatmapData.map(d => d.clicks), 1);
+    
+    dataCollection.heatmapData.forEach(data => {
+        const cell = document.querySelector(`[data-index="${data.cell}"]`);
+        const intensity = data.clicks / maxClicks;
+        cell.style.backgroundColor = `rgba(67, 97, 238, ${intensity})`;
+        cell.style.color = intensity > 0.5 ? 'white' : 'black';
+        cell.textContent = data.clicks;
+    });
+}
+
+function updateHeatmapDisplay() {
+    const totalClicks = dataCollection.heatmapData.reduce((sum, d) => sum + d.clicks, 0);
+    const mostClicked = dataCollection.heatmapData.reduce((max, d) => 
+        d.clicks > (max.clicks || 0) ? d : max, {});
+    
+    const display = `总点击: ${totalClicks} | 最热区域: ${mostClicked.cell || 'N/A'} (${mostClicked.clicks || 0}次)`;
+    document.getElementById('heatmapData').textContent = display;
+}
+
+function resetHeatmap() {
+    dataCollection.heatmapData = [];
+    document.querySelectorAll('.heatmap-cell').forEach(cell => {
+        cell.style.backgroundColor = '';
+        cell.textContent = '';
+    });
+    updateHeatmapDisplay();
+}
+
+// 数据汇总和导出
+function updateSummary() {
+    setInterval(() => {
+        const totalEvents = dataCollection.behaviors.length + 
+                          dataCollection.quizData.length + 
+                          dataCollection.focusData.length + 
+                          dataCollection.typingData.length;
+        
+        const sessionDuration = Math.round((Date.now() - dataCollection.sessionStart) / 60000);
+        const averageFocus = calculateAverageFocus();
+        const recentActivities = getRecentActivities();
+        
+        const summary = `会话时长: ${sessionDuration} 分钟\n总事件数: ${totalEvents}\n平均专注度: ${averageFocus}%\n\n最近活动:\n${recentActivities}`;
+        
+        document.getElementById('summaryData').textContent = summary;
+    }, 2000);
+}
+
+function calculateAverageFocus() {
+    const focusScores = dataCollection.focusData
+        .filter(d => d.focusScore !== undefined)
+        .map(d => d.focusScore);
+    return focusScores.length ? Math.round(
+        focusScores.reduce((sum, score) => sum + score, 0) / focusScores.length
+    ) : 0;
+}
+
+function getRecentActivities() {
+    const allEvents = [
+        ...dataCollection.behaviors.map(e => ({...e, source: 'behavior'})),
+        ...dataCollection.quizData.map(e => ({...e, source: 'quiz'})),
+        ...dataCollection.focusData.map(e => ({...e, source: 'focus'})),
+        ...dataCollection.typingData.map(e => ({...e, source: 'typing'}))
+    ].sort((a, b) => b.timestamp - a.timestamp).slice(0, 5);
+    
+    return allEvents.map(event => 
+        `${new Date(event.timestamp).toLocaleTimeString()}: ${event.source} - ${event.type || 'activity'}`
+    ).join('\n');
+}
+
+function exportData() {
+    const exportData = {
+        timestamp: new Date().toISOString(),
+        sessionInfo: {
+            startTime: dataCollection.sessionStart,
+            duration: Date.now() - dataCollection.sessionStart
+        },
+        behaviors: dataCollection.behaviors,
+        quizData: dataCollection.quizData,
+        focusData: dataCollection.focusData,
+        timeData: dataCollection.timeData,
+        typingData: dataCollection.typingData,
+        heatmapData: dataCollection.heatmapData
+    };
+    
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+        type: 'application/json'
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `education_data_${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert('数据导出成功！');
+}
+
+function generateReport() {
+    const report = generateAnalysisReport();
+    const blob = new Blob([report], { type: 'text/plain; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `education_analysis_report_${new Date().toISOString().slice(0, 10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert('分析报告生成成功！');
+}
+
+function generateAnalysisReport() {
+    const sessionDuration = (Date.now() - dataCollection.sessionStart) / 60000;
+    const totalInteractions = dataCollection.behaviors.length;
+    const averageFocus = calculateAverageFocus();
+    
+    return `
+==============================================
+教育数据采集与分析报告
+==============================================
+生成时间: ${new Date().toLocaleString()}
+会话时长: ${sessionDuration.toFixed(1)} 分钟
+
+一、学习行为统计
+----------------------------------------------
+• 总交互次数: ${totalInteractions}
+• 点击行为: ${dataCollection.behaviors.filter(b => b.type === 'click').length}
+• 滚动行为: ${dataCollection.behaviors.filter(b => b.type === 'scroll').length}
+• 平均每分钟交互: ${(totalInteractions / sessionDuration).toFixed(1)}
+
+二、答题表现分析
+----------------------------------------------
+• 答题动作数: ${dataCollection.quizData.length}
+• 平均答题时间: ${dataCollection.quizData.length ? 
+    (dataCollection.quizData.reduce((sum, q) => sum + (q.timeSpent || 0), 0) / dataCollection.quizData.length / 1000).toFixed(1) : 0} 秒
+
+三、专注度评估
+----------------------------------------------
+• 平均专注度得分: ${averageFocus}/100
+• 专注状态变化次数: ${dataCollection.focusData.filter(f => f.type === 'focus' || f.type === 'blur').length}
+• 专注度评级: ${averageFocus > 80 ? '优秀' : averageFocus > 60 ? '良好' : averageFocus > 40 ? '一般' : '需改进'}
+
+四、输入行为分析
+----------------------------------------------
+• 输入事件总数: ${dataCollection.typingData.length}
+• 思考停顿次数: ${dataCollection.typingData.length ? dataCollection.typingData[dataCollection.typingData.length - 1].pauses : 0}
+• 最终打字速度: ${dataCollection.typingData.length ? dataCollection.typingData[dataCollection.typingData.length - 1].wpm : 0} 字/分钟
+
+五、交互热力分析
+----------------------------------------------
+• 热力图总点击: ${dataCollection.heatmapData.reduce((sum, d) => sum + d.clicks, 0)}
+• 活跃区域数量: ${dataCollection.heatmapData.length}
+• 交互分布: ${dataCollection.heatmapData.length ? '存在明显的交互偏好区域' : '交互分布较为均匀'}
+
+==============================================
+报告结束
+==============================================
+    `.trim();
+}
+
+// ==================== AI分析功能 ====================
+
+// 初始化AI分析功能
+function initAIAnalysis() {
+    // 添加AI分析按钮事件监听
+    document.getElementById('analyzeBehavior').addEventListener('click', () => {
+        analyzeWithDeepSeek('behavior');
+    });
+    
+    document.getElementById('analyzeFocus').addEventListener('click', () => {
+        analyzeWithDeepSeek('focus');
+    });
+    
+    document.getElementById('analyzeQuiz').addEventListener('click', () => {
+        analyzeWithDeepSeek('quiz');
+    });
+    
+    document.getElementById('comprehensiveAnalysis').addEventListener('click', () => {
+        analyzeWithDeepSeek('comprehensive');
+    });
+}
+
+// 显示AI加载状态
+function showAILoading() {
+    document.getElementById('aiResponse').style.display = 'none';
+    document.getElementById('aiLoading').style.display = 'flex';
+}
+
+// 隐藏AI加载状态
+function hideAILoading() {
+    document.getElementById('aiLoading').style.display = 'none';
+    document.getElementById('aiResponse').style.display = 'block';
+}
+
+// 显示AI响应
+function showAIResponse(content) {
+    const aiResponse = document.getElementById('aiResponse');
+    aiResponse.innerHTML = `
+        <div class="ai-analysis-result">
+            <div class="ai-analysis-title">
+                <span>🤖</span> AI分析结果（演示模式）
+            </div>
+            <div class="ai-analysis-content">
+                ${content}
+            </div>
+            <div class="ai-suggestion">
+                <div class="ai-suggestion-title">💡 温馨提示</div>
+                <p>这是演示版本，展示前端数据采集与AI分析集成的可能性。</p>
+            </div>
+        </div>
+    `;
+    hideAILoading();
+}
+
+// 模拟AI分析
+async function analyzeWithDeepSeek(analysisType) {
+    showAILoading();
+    
+    // 模拟API调用延迟
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    const sessionDuration = Math.round((Date.now() - dataCollection.sessionStart) / 60000);
+    const totalInteractions = dataCollection.behaviors.length;
+    const averageFocus = calculateAverageFocus();
+    
+    let response = '';
+    
+    switch(analysisType) {
+        case 'behavior':
+            response = `
+                <h4>📊 学习行为分析</h4>
+                <p><strong>活跃度评估：</strong>在${sessionDuration}分钟内，您产生了${totalInteractions}次交互，平均每分钟${(totalInteractions/sessionDuration).toFixed(1)}次，表现出较好的学习参与度。</p>
+                <p><strong>交互模式：</strong>您的交互以点击为主，说明您习惯于主动探索学习内容。滚动行为适中，显示良好的内容阅读习惯。</p>
+                <p><strong>建议：</strong>保持当前的学习节奏，可以尝试增加深度思考的时间。</p>
+            `;
+            break;
+        case 'focus':
+            response = `
+                <h4>🎯 专注度分析</h4>
+                <p><strong>专注度得分：</strong>${averageFocus}/100，${averageFocus > 70 ? '专注度优秀' : averageFocus > 50 ? '专注度良好' : '需要改善专注度'}。</p>
+                <p><strong>状态变化：</strong>您的专注状态相对稳定，页面焦点变化较少，说明学习时专心致志。</p>
+                <p><strong>建议：</strong>${averageFocus < 70 ? '建议减少干扰源，创造更好的学习环境。' : '继续保持良好的专注习惯！'}</p>
+            `;
+            break;
+        case 'quiz':
+            response = `
+                <h4>✏️ 答题模式分析</h4>
+                <p><strong>答题速度：</strong>您的答题节奏适中，显示出良好的思考习惯。</p>
+                <p><strong>选择模式：</strong>答题时有适当的犹豫和思考，这是深度学习的表现。</p>
+                <p><strong>建议：</strong>继续保持深度思考的习惯，同时可以适当提升答题效率。</p>
+            `;
+            break;
+        case 'comprehensive':
+            response = `
+                <h4>🧠 综合学习分析</h4>
+                <p><strong>整体表现：</strong>您在本次学习会话中表现出良好的学习状态，交互积极，专注度较高。</p>
+                <p><strong>学习特征：</strong></p>
+                <ul>
+                    <li>学习参与度：${totalInteractions > 20 ? '高' : '中等'}（交互次数${totalInteractions}）</li>
+                    <li>专注维持：${averageFocus > 70 ? '优秀' : '良好'}（专注度${averageFocus}%）</li>
+                    <li>会话时长：${sessionDuration}分钟，时长合适</li>
+                </ul>
+                <p><strong>个性化建议：</strong></p>
+                <ul>
+                    <li>保持当前的学习节奏和专注度</li>
+                    <li>适当增加思考时间，深化理解</li>
+                    <li>定期回顾学习数据，持续优化学习策略</li>
+                </ul>
+            `;
+            break;
+    }
+    
+    showAIResponse(response);
+}
+    </script>
+</body>
+</html>
